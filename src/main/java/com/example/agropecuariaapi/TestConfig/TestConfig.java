@@ -18,7 +18,7 @@ public class TestConfig implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 //        Cliente c = new Cliente();
-//        c.setNome("Pedro");
+//        c.setNome("Alberto");
 //        c.setCpf("1620555");
 //        c.setEmail("email@email");
 //        c.setTelefone("8484554");

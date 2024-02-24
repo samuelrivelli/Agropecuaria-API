@@ -1,7 +1,8 @@
 package com.example.agropecuariaapi.controller;
 
-import com.example.agropecuariaapi.model.entity.Cliente;
-import com.example.agropecuariaapi.service.ClienteService;
+import com.example.agropecuariaapi.model.entity.Pessoa;
+import com.example.agropecuariaapi.model.entity.Endereco;
+import com.example.agropecuariaapi.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clientes")
-public class ClienteController {
+@RequestMapping("/pessoas")
+public class PessoaController {
 
     @Autowired
-    private ClienteService service;
+    private PessoaService service;
 
     @GetMapping
     public ResponseEntity findAll() {
-        List<Cliente> list = service.findAll();
+        List<Pessoa> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
