@@ -1,7 +1,7 @@
 package com.example.agropecuariaapi.controller;
 
-import com.example.agropecuariaapi.model.entity.Cliente;
-import com.example.agropecuariaapi.service.ClienteService;
+import com.example.agropecuariaapi.model.entity.Venda;
+import com.example.agropecuariaapi.service.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,27 +11,27 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/clientes")
-public class ClienteController {
+@RequestMapping("/Vendas")
+public class VendaController {
 
     @Autowired
-    private ClienteService service;
+    private VendaService service;
 
     @GetMapping
     public ResponseEntity findAll() {
-        List<Cliente> list = service.findAll();
+        List<Venda> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable("id") Long id){
-        Optional cliente = service.findById(id);
+        Optional Venda = service.findById(id);
 
-        if(!cliente.isPresent()){
-            return new ResponseEntity<>("Cliente não encontrado", HttpStatus.NOT_FOUND);
+        if(!Venda.isPresent()){
+            return new ResponseEntity<>("Venda não encontrada", HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(cliente);
+        return ResponseEntity.ok(Venda);
 
     }
 
