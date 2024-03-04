@@ -5,12 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@MappedSuperclass
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "pessoa")
-public class Pessoa {
+public abstract class Pessoa {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)

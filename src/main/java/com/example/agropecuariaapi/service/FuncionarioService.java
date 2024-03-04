@@ -3,6 +3,7 @@ package com.example.agropecuariaapi.service;
 import com.example.agropecuariaapi.model.entity.Funcionario;
 import com.example.agropecuariaapi.model.repository.FuncionarioRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @Service
 public class FuncionarioService {
 
+    @Autowired
     private FuncionarioRepository repository;
     public List<Funcionario> findAll(){
         return repository.findAll();

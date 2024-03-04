@@ -4,6 +4,7 @@ import com.example.agropecuariaapi.model.entity.Endereco;
 import com.example.agropecuariaapi.model.repository.EnderecoRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class EnderecoService {
 
+    @Autowired
     private EnderecoRepository repository;
     public List<Endereco> findAll(){
         return repository.findAll();
