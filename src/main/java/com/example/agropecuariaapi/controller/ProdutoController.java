@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/Produtos")
+@RequestMapping("/produtos")
 public class ProdutoController {
 
     @Autowired
@@ -33,6 +33,48 @@ public class ProdutoController {
 
         return ResponseEntity.ok(Produto);
 
+    }
+
+    @PostMapping
+    public ResponseEntity post(@RequestBody Produto Produto){
+        Produto = service.salvar(Produto);
+        return ResponseEntity.ok().body(Produto);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity excluir(@PathVariable("id") Long id){
+        Optional<Produto> Produto = service.findById(id);
+
+        if(!Produto.isPresent()){
+            return new ResponseEntity<>("Produto não encontrado", HttpStatus.NOT_FOUND);
+        }
+
+        service.excluir(Produto.get());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody Produto ProdutoAtualizado){
+
+        Optional<Produto> ProdutosExistente = service.findById(id);
+
+        if(!service.findById(id).isPresent()){
+            return new ResponseEntity<>("Produtos não encontrado",HttpStatus.NOT_FOUND);
+        }
+
+        Produto Produto = ProdutosExistente.get();
+        Produto.setNome(ProdutoAtualizado.getNome());
+        Produto.setTamanho(ProdutoAtualizado.getTamanho());
+        Produto.setLote(ProdutoAtualizado.getLote());
+        Produto.setValidade(ProdutoAtualizado.getValidade());
+        Produto.setQuantidadeEmEstoque(ProdutoAtualizado.getQuantidadeEmEstoque());
+        Produto.setEstoqueMinimo(ProdutoAtualizado.getEstoqueMinimo());
+        Produto.setEstoqueMaximo(ProdutoAtualizado.getEstoqueMaximo());
+        Produto.setValorDeReposicao(ProdutoAtualizado.getValorDeReposicao());
+        Produto.setPreco(ProdutoAtualizado.getPreco());
+
+        service.salvar(Produto);
+        return ResponseEntity.ok(Produto);
     }
 
 }

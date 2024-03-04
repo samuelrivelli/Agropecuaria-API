@@ -17,24 +17,24 @@ public class TestConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Cliente c = new Cliente();
-        c.setNome("Jose Ferreira da Silva");
-        c.setCpf("1620555");
-        c.setEmail("email@email");
-        c.setTelefone("8484554");
-
-        Endereco endereco = new Endereco();
-        endereco.setLogradouro("Rua Exemplo");
-        endereco.setNumero(123);
-        endereco.setComplemento("APTO 101");
-        endereco.setBairro("Centro");
-        endereco.setCidade("Cidade Exemplo");
-        endereco.setUf("UF");
-        endereco.setCep("12345-678");
-
-        c.setEndereco(endereco);
-
-        clienteRepository.save(c);
+//        Cliente c = new Cliente();
+//        c.setNome("Jose Ferreira da Silva");
+//        c.setCpf("1620555");
+//        c.setEmail("email@email");
+//        c.setTelefone("8484554");
+//
+//        Endereco endereco = new Endereco();
+//        endereco.setLogradouro("Rua Exemplo");
+//        endereco.setNumero(123);
+//        endereco.setComplemento("APTO 101");
+//        endereco.setBairro("Centro");
+//        endereco.setCidade("Cidade Exemplo");
+//        endereco.setUf("UF");
+//        endereco.setCep("12345-678");
+//
+//        c.setEndereco(endereco);
+//
+//        clienteRepository.save(c);
 
     }
 }

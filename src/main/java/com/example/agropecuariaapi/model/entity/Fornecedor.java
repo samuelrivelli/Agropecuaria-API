@@ -1,9 +1,6 @@
 package com.example.agropecuariaapi.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +19,9 @@ public class Fornecedor {
     private String cnpj;
     private String telefone;
     private String email;
-    private String endereco;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Endereco endereco;
+
     private String descricao;
 }
