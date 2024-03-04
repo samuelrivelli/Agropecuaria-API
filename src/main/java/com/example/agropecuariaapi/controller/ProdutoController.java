@@ -56,13 +56,13 @@ public class ProdutoController {
     @PutMapping("{id}")
     public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody Produto ProdutoAtualizado){
 
-        Optional<Produto> ProdutosExistente = service.findById(id);
+        Optional<Produto> ProdutoExistente = service.findById(id);
 
         if(!service.findById(id).isPresent()){
             return new ResponseEntity<>("Produtos não encontrado",HttpStatus.NOT_FOUND);
         }
 
-        Produto Produto = ProdutosExistente.get();
+        Produto Produto = ProdutoExistente.get();
         Produto.setNome(ProdutoAtualizado.getNome());
         Produto.setTamanho(ProdutoAtualizado.getTamanho());
         Produto.setLote(ProdutoAtualizado.getLote());

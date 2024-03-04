@@ -1,7 +1,6 @@
 package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.model.entity.Endereco;
-import com.example.agropecuariaapi.model.entity.Endereco;
 import com.example.agropecuariaapi.service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

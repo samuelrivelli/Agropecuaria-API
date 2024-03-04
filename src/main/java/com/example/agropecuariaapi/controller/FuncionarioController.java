@@ -1,7 +1,6 @@
 package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.model.entity.Funcionario;
-import com.example.agropecuariaapi.model.entity.Funcionario;
 import com.example.agropecuariaapi.service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
