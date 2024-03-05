@@ -1,7 +1,7 @@
 package com.example.agropecuariaapi.service;
 
-import com.example.agropecuariaapi.model.entity.Dividas;
-import com.example.agropecuariaapi.model.repository.DividasRepository;
+import com.example.agropecuariaapi.model.entity.Divida;
+import com.example.agropecuariaapi.model.repository.DividaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,23 +14,23 @@ import java.util.Optional;
 public class DividasService {
 
     @Autowired
-    private DividasRepository repository;
-    public List<Dividas> findAll(){
+    private DividaRepository repository;
+    public List<Divida> findAll(){
         return repository.findAll();
     }
-    public Optional<Dividas> findById(Long id){
+    public Optional<Divida> findById(Long id){
         return repository.findById(id);
     }
 
     @Transactional
-    public Dividas salvar(Dividas Dividas){
-        return repository.save(Dividas);
+    public Divida salvar(Divida Divida){
+        return repository.save(Divida);
     }
 
     @Transactional
-    public void excluir(Dividas Dividas){
-        Objects.requireNonNull(Dividas.getId());
-        repository.delete(Dividas);
+    public void excluir(Divida Divida){
+        Objects.requireNonNull(Divida.getId());
+        repository.delete(Divida);
     }
 
 }
