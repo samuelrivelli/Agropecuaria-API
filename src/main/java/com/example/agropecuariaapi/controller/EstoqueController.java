@@ -52,21 +52,5 @@ public class EstoqueController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody Estoque EstoqueAtualizado){
-
-        Optional<Estoque> EstoqueExistente = service.findById(id);
-
-        if(!service.findById(id).isPresent()){
-            return new ResponseEntity<>("Estoque não encontrado",HttpStatus.NOT_FOUND);
-        }
-
-        Estoque Estoque = EstoqueExistente.get();
-        Estoque.setProdutos(EstoqueAtualizado.getProdutos());
-
-        service.salvar(Estoque);
-        return ResponseEntity.ok(Estoque);
-    }
-
 
 }

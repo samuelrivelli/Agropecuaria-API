@@ -53,21 +53,6 @@ public class HistoricoVendasController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody HistoricoVendas HistoricoVendasAtualizado){
-
-        Optional<HistoricoVendas> HistoricoVendasExistente = service.findById(id);
-
-        if(!service.findById(id).isPresent()){
-            return new ResponseEntity<>("HistoricoVendas não encontrado",HttpStatus.NOT_FOUND);
-        }
-
-        HistoricoVendas HistoricoVendas = HistoricoVendasExistente.get();
-        HistoricoVendas.setVendas(HistoricoVendasAtualizado.getVendas());
-
-        service.salvar(HistoricoVendas);
-        return ResponseEntity.ok(HistoricoVendas);
-    }
 
 
 }

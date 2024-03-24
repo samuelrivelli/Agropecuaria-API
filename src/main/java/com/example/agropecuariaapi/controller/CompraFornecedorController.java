@@ -53,21 +53,6 @@ public class CompraFornecedorController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody CompraFornecedor CompraFornecedorAtualizado){
-
-        Optional<CompraFornecedor> CompraFornecedorExistente = service.findById(id);
-
-        if(!service.findById(id).isPresent()){
-            return new ResponseEntity<>("CompraFornecedor não encontrado",HttpStatus.NOT_FOUND);
-        }
-
-        CompraFornecedor CompraFornecedor = CompraFornecedorExistente.get();
-        CompraFornecedor.setProdutos(CompraFornecedorAtualizado.getProdutos());
-
-        service.salvar(CompraFornecedor);
-        return ResponseEntity.ok(CompraFornecedor);
-    }
 
 
 }

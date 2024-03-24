@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -19,18 +17,15 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
-    private List<Produto> produtos;
-    private Double quantidade;
-
     @OneToOne
     private Cliente cliente;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private LocalDate validade;
-
     private String formaDePagamento;
 
-
+   @ManyToMany
+   @JoinTable(name = "venda_produtos",
+           joinColumns = @JoinColumn(name = "venda_id"),
+           inverseJoinColumns = @JoinColumn(name = "produto_id"))
+    private List<Produto> produtos;
 
 }

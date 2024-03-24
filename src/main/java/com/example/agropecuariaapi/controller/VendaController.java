@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/Vendas")
+@RequestMapping("/vendas")
 public class VendaController {
 
     @Autowired
@@ -52,25 +52,6 @@ public class VendaController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody Venda VendaAtualizado){
-
-        Optional<Venda> VendaExistente = service.findById(id);
-
-        if(!service.findById(id).isPresent()){
-            return new ResponseEntity<>("Venda não encontrado",HttpStatus.NOT_FOUND);
-        }
-
-        Venda Venda = VendaExistente.get();
-        Venda.setProdutos(VendaAtualizado.getProdutos());
-        Venda.setQuantidade(VendaAtualizado.getQuantidade());
-        Venda.setCliente(VendaAtualizado.getCliente());
-        Venda.setValidade(VendaAtualizado.getValidade());
-        Venda.setFormaDePagamento(VendaAtualizado.getFormaDePagamento());
-
-        service.salvar(Venda);
-        return ResponseEntity.ok(Venda);
-    }
 
 
 }

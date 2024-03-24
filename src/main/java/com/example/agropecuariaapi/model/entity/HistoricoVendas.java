@@ -17,8 +17,6 @@ public class HistoricoVendas {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
-    private List<Venda> vendas;
 
 }
 

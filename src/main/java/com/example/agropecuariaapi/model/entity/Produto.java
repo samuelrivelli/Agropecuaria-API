@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -31,4 +32,14 @@ public class Produto {
     private Integer estoqueMaximo;
     private Integer valorDeReposicao;
     private Double preco;
+
+    @ManyToOne
+    private Estoque estoque;
+
+    @ManyToOne
+    private HistoricoVendas historicoVendas;
+
+    @ManyToMany(mappedBy = "produtos")
+    private List<Venda> vendas;
+
 }

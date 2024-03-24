@@ -13,20 +13,26 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "compra_fornecedor")
 public class CompraFornecedor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     private Fornecedor fornecedor;
-    @OneToMany
-    private List<Produto> produtos;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate data;
     private Double valor;
     private String notaFiscal;
+
+    @ManyToMany
+    @JoinTable(name = "compraFornecedor_produtos",
+            joinColumns = @JoinColumn(name="compraFornecedor_id"),
+            inverseJoinColumns = @JoinColumn(name="produto_id)")
+    )
+    private List<Produto> produtos;
 
 }
