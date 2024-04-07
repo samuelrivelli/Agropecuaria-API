@@ -1,9 +1,10 @@
 package com.example.agropecuariaapi.controller;
 
-import com.example.agropecuariaapi.dto.ClienteDTO;
 import com.example.agropecuariaapi.dto.FuncionarioDTO;
+import com.example.agropecuariaapi.model.entity.Endereco;
 import com.example.agropecuariaapi.model.entity.Funcionario;
 import com.example.agropecuariaapi.service.FuncionarioService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,6 +76,16 @@ public class FuncionarioController {
         service.salvar(Funcionario);
         return ResponseEntity.ok(Funcionario);
     }
+
+    public Funcionario converter(FuncionarioDTO dto){
+        ModelMapper modelMapper = new ModelMapper();
+        Funcionario Funcionario = modelMapper.map(dto, Funcionario.class);
+        Endereco endereco = modelMapper.map(dto,Endereco.class);
+        Funcionario.setEndereco(endereco);
+
+        return Funcionario;
+    }
+
 
 
 }

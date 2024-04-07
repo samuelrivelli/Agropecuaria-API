@@ -1,7 +1,10 @@
 package com.example.agropecuariaapi.controller;
 
+import com.example.agropecuariaapi.dto.FornecedorDTO;
+import com.example.agropecuariaapi.model.entity.Endereco;
 import com.example.agropecuariaapi.model.entity.Fornecedor;
 import com.example.agropecuariaapi.service.FornecedorService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +76,16 @@ public class FornecedorController {
         service.salvar(Fornecedor);
         return ResponseEntity.ok(Fornecedor);
     }
+
+    public Fornecedor converter(FornecedorDTO dto){
+        ModelMapper modelMapper = new ModelMapper();
+        Fornecedor fornecedor = modelMapper.map(dto, Fornecedor.class);
+        Endereco endereco = modelMapper.map(dto,Endereco.class);
+        fornecedor.setEndereco(endereco);
+
+        return fornecedor;
+    }
+
 
 
 }

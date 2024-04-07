@@ -1,7 +1,9 @@
 package com.example.agropecuariaapi.controller;
 
+import com.example.agropecuariaapi.dto.ProdutoDTO;
 import com.example.agropecuariaapi.model.entity.Produto;
 import com.example.agropecuariaapi.service.ProdutoService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,6 +77,11 @@ public class ProdutoController {
 
         service.salvar(Produto);
         return ResponseEntity.ok(Produto);
+    }
+
+    public Produto converter(ProdutoDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(dto, Produto.class);
     }
 
 }

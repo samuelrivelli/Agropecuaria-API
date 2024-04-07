@@ -2,8 +2,10 @@ package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.dto.ClienteDTO;
 import com.example.agropecuariaapi.dto.DividaDTO;
+import com.example.agropecuariaapi.model.entity.Cliente;
 import com.example.agropecuariaapi.model.entity.Divida;
 import com.example.agropecuariaapi.service.DividasService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +73,16 @@ public class DividaController {
         Divida.setVencimento(dividaAtualizado.getVencimento());
         service.salvar(Divida);
         return ResponseEntity.ok(Divida);
+    }
+
+    public Divida converter(DividaDTO dto){
+        ModelMapper modelMapper = new ModelMapper();
+        Divida divida = modelMapper.map(dto, Divida.class);
+        Cliente cliente = modelMapper.map(dto, Cliente.class);
+
+        divida.setCliente(cliente);
+
+        return divida;
     }
 
 }
