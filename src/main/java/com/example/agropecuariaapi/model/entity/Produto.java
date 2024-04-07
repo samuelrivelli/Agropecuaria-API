@@ -39,7 +39,11 @@ public class Produto {
     @ManyToOne
     private HistoricoVendas historicoVendas;
 
-    @ManyToMany(mappedBy = "produtos")
+    @ManyToMany(mappedBy = "produto")
     private List<Venda> vendas;
+
+    @ManyToMany(mappedBy = "produto")
+    private List<CompraFornecedor> compraFornecedores;
+
 
 }

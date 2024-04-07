@@ -1,5 +1,6 @@
 package com.example.agropecuariaapi.controller;
 
+import com.example.agropecuariaapi.dto.VendaDTO;
 import com.example.agropecuariaapi.model.entity.Venda;
 import com.example.agropecuariaapi.service.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/vendas")
@@ -20,18 +22,18 @@ public class VendaController {
     @GetMapping
     public ResponseEntity findAll() {
         List<Venda> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        return ResponseEntity.ok(list.stream().map(VendaDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable("id") Long id){
-        Optional Venda = service.findById(id);
+        Optional<Venda> Venda = service.findById(id);
 
         if(!Venda.isPresent()){
             return new ResponseEntity<>("Venda não encontrada", HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(Venda);
+        return ResponseEntity.ok(Venda.map(VendaDTO::create));
 
     }
     @PostMapping

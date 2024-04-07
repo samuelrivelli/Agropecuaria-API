@@ -29,10 +29,6 @@ public class CompraFornecedor {
     private String notaFiscal;
 
     @ManyToMany
-    @JoinTable(name = "compraFornecedor_produtos",
-            joinColumns = @JoinColumn(name="compraFornecedor_id"),
-            inverseJoinColumns = @JoinColumn(name="produto_id)")
-    )
     private List<Produto> produtos;
 
 }

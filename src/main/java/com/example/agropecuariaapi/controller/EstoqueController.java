@@ -1,5 +1,6 @@
 package com.example.agropecuariaapi.controller;
 
+import com.example.agropecuariaapi.dto.EstoqueDTO;
 import com.example.agropecuariaapi.model.entity.Estoque;
 import com.example.agropecuariaapi.service.EstoqueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/estoques")
@@ -20,18 +22,18 @@ public class EstoqueController {
     @GetMapping
     public ResponseEntity findAll() {
         List<Estoque> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        return ResponseEntity.ok(list.stream().map(EstoqueDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable("id") Long id){
-        Optional Estoque = service.findById(id);
+        Optional<Estoque> estoque = service.findById(id);
 
-        if(!Estoque.isPresent()){
+        if(!estoque.isPresent()){
             return new ResponseEntity<>("Estoque não encontrado", HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(Estoque);
+        return ResponseEntity.ok(estoque.map(EstoqueDTO::create));
 
     }
     @PostMapping

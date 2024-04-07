@@ -23,9 +23,6 @@ public class Venda {
     private String formaDePagamento;
 
    @ManyToMany
-   @JoinTable(name = "venda_produtos",
-           joinColumns = @JoinColumn(name = "venda_id"),
-           inverseJoinColumns = @JoinColumn(name = "produto_id"))
-    private List<Produto> produtos;
+   private List<Produto> produtos;
 
 }

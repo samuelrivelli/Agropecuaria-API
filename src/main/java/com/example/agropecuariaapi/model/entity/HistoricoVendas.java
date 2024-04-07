@@ -17,6 +17,8 @@ public class HistoricoVendas {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(mappedBy = "historicoVendas")
+    List<Produto> produtos;
 
 }
 

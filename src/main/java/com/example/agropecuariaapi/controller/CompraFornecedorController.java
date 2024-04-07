@@ -1,5 +1,6 @@
 package com.example.agropecuariaapi.controller;
 
+import com.example.agropecuariaapi.dto.CompraFornecedorDTO;
 import com.example.agropecuariaapi.model.entity.CompraFornecedor;
 import com.example.agropecuariaapi.service.CompraFornecedorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/compraFornecedor")
@@ -20,18 +22,18 @@ public class CompraFornecedorController {
     @GetMapping
     public ResponseEntity findAll() {
         List<CompraFornecedor> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        return ResponseEntity.ok(list.stream().map(CompraFornecedorDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable("id") Long id){
-        Optional compraFornecedor = service.findById(id);
+        Optional<CompraFornecedor> compraFornecedor = service.findById(id);
 
         if(!compraFornecedor.isPresent()){
             return new ResponseEntity<>("Compra não encontrado", HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(compraFornecedor);
+        return ResponseEntity.ok(compraFornecedor.map(CompraFornecedorDTO::create));
 
     }
 
