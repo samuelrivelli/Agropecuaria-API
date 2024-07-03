@@ -23,7 +23,7 @@ public class Venda {
 
     private String formaDePagamento;
 
-    @JsonIgnore
+
     @ManyToMany
     private List<Produto> produtos;
 }

@@ -27,7 +27,7 @@ public class VendaController {
 
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable("id") Long id){
-        Optional<Venda> Venda = service.findById(id);
+        Optional<Venda > Venda = service.findById(id);
 
         if(!Venda.isPresent()){
             return new ResponseEntity<>("Venda não encontrada", HttpStatus.NOT_FOUND);

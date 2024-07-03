@@ -18,9 +18,11 @@ public class Divida {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
     private Double valor;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String vencimento;
 
 }

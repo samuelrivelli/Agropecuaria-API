@@ -1,5 +1,7 @@
 package com.example.agropecuariaapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,9 +40,13 @@ public class Produto {
     @ManyToOne
     private HistoricoVendas historicoVendas;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "produtos")
     private List<Venda> vendas;
 
+
+    @JsonIgnore
+    @JsonBackReference
     @ManyToMany(mappedBy = "produtos")
     private List<CompraFornecedor> compraFornecedores;
 }
