@@ -1,5 +1,6 @@
 package com.example.agropecuariaapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class Venda {
 
     private String formaDePagamento;
 
-   @ManyToMany
-   private List<Produto> produtos;
-
+    @JsonIgnore
+    @ManyToMany
+    private List<Produto> produtos;
 }

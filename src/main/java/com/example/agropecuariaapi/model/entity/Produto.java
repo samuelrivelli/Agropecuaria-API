@@ -23,7 +23,6 @@ public class Produto {
     private Double tamanho;
     private String lote;
 
-
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate validade;
 
@@ -39,11 +38,9 @@ public class Produto {
     @ManyToOne
     private HistoricoVendas historicoVendas;
 
-    @ManyToMany(mappedBy = "produto")
+    @ManyToMany(mappedBy = "produtos")
     private List<Venda> vendas;
 
-    @ManyToMany(mappedBy = "produto")
+    @ManyToMany(mappedBy = "produtos")
     private List<CompraFornecedor> compraFornecedores;
-
-
 }

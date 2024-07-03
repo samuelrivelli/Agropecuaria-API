@@ -1,10 +1,10 @@
 package com.example.agropecuariaapi.dto;
 
 import com.example.agropecuariaapi.model.entity.Cliente;
+import org.modelmapper.ModelMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
 
 @Data
 @NoArgsConstructor
@@ -26,9 +26,9 @@ public class ClienteDTO {
 
     public static ClienteDTO create(Cliente cliente) {
         ModelMapper modelMapper = new ModelMapper();
+        ClienteDTO dto = modelMapper.map(cliente, ClienteDTO.class);
 
-            ClienteDTO dto = modelMapper.map(cliente, ClienteDTO.class);
-            dto = modelMapper.map(cliente, ClienteDTO.class);
+        if (cliente.getEndereco() != null) {
             dto.logradouro = cliente.getEndereco().getLogradouro();
             dto.numero = cliente.getEndereco().getNumero();
             dto.complemento = cliente.getEndereco().getComplemento();
@@ -36,8 +36,16 @@ public class ClienteDTO {
             dto.cidade = cliente.getEndereco().getCidade();
             dto.uf = cliente.getEndereco().getUf();
             dto.cep = cliente.getEndereco().getCep();
+        } else {
+            dto.logradouro = null;
+            dto.numero = null;
+            dto.complemento = null;
+            dto.bairro = null;
+            dto.cidade = null;
+            dto.uf = null;
+            dto.cep = null;
+        }
 
         return dto;
     }
-
 }

@@ -1,5 +1,6 @@
 package com.example.agropecuariaapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class CompraFornecedor {
     private Double valor;
     private String notaFiscal;
 
+    @JsonIgnore
     @ManyToMany
     private List<Produto> produtos;
 
