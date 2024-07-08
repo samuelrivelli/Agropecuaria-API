@@ -23,7 +23,7 @@ public class ProdutoService {
     }
 
     @Transactional
-    public Produto salvar(Produto produto){
+    public Produto save(Produto produto){
         return repository.save(produto);
     }
 

@@ -22,7 +22,7 @@ public class EstoqueService {
         return repository.findById(id);
     }
     @Transactional
-    public Estoque salvar(Estoque estoque){
+    public Estoque save(Estoque estoque){
         return repository.save(estoque);
     }
 

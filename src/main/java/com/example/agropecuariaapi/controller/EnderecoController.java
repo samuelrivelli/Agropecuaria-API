@@ -34,13 +34,6 @@ public class EnderecoController {
         return ResponseEntity.ok(Endereco);
 
     }
-
-    @PostMapping
-    public ResponseEntity post(@RequestBody Endereco endereco){
-        endereco = service.salvar(endereco);
-        return ResponseEntity.ok().body(endereco);
-    }
-
     @DeleteMapping("{id}")
     public ResponseEntity excluir(@PathVariable("id") Long id){
         Optional<Endereco> Endereco = service.findById(id);

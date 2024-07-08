@@ -39,7 +39,7 @@ public class ProdutoController {
 
     @PostMapping
     public ResponseEntity post(@RequestBody Produto Produto){
-        Produto = service.salvar(Produto);
+        Produto = service.save(Produto);
         return ResponseEntity.ok().body(Produto);
     }
 
@@ -75,7 +75,7 @@ public class ProdutoController {
         Produto.setValorDeReposicao(ProdutoAtualizado.getValorDeReposicao());
         Produto.setPreco(ProdutoAtualizado.getPreco());
 
-        service.salvar(Produto);
+        service.save(Produto);
         return ResponseEntity.ok(Produto);
     }
 

@@ -2,7 +2,10 @@ package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.dto.EstoqueDTO;
 import com.example.agropecuariaapi.model.entity.Estoque;
+import com.example.agropecuariaapi.model.entity.Produto;
 import com.example.agropecuariaapi.service.EstoqueService;
+import com.example.agropecuariaapi.service.ProdutoService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,9 @@ public class EstoqueController {
 
     @Autowired
     private EstoqueService service;
+
+    @Autowired
+    private ProdutoService produtoService;
 
     @GetMapping
     public ResponseEntity findAll() {
@@ -37,9 +43,16 @@ public class EstoqueController {
 
     }
     @PostMapping
-    public ResponseEntity post(@RequestBody Estoque Estoque){
-        Estoque = service.salvar(Estoque);
-        return ResponseEntity.ok().body(Estoque);
+    public ResponseEntity<EstoqueDTO> createEstoque(@RequestBody EstoqueDTO estoqueDTO) {
+        Estoque estoque = converter(estoqueDTO);
+
+        for (Produto produto : estoque.getProdutos()) {
+            produtoService.save(produto);
+        }
+        estoque = service.save(estoque);
+
+        EstoqueDTO dto = EstoqueDTO.create(estoque);
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("{id}")
@@ -52,6 +65,19 @@ public class EstoqueController {
 
         service.excluir(Estoque.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private Estoque converter(EstoqueDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Estoque estoque = modelMapper.map(dto, Estoque.class);
+
+        List<Produto> produtos = dto.getProdutos().stream()
+                .map(produtoDTO -> modelMapper.map(produtoDTO, Produto.class))
+                .collect(Collectors.toList());
+
+        estoque.setProdutos(produtos);
+
+        return estoque;
     }
 
 
