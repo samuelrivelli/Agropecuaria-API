@@ -4,6 +4,7 @@ import com.example.agropecuariaapi.dto.ClienteDTO;
 import com.example.agropecuariaapi.dto.DividaDTO;
 import com.example.agropecuariaapi.model.entity.Cliente;
 import com.example.agropecuariaapi.model.entity.Divida;
+import com.example.agropecuariaapi.service.ClienteService;
 import com.example.agropecuariaapi.service.DividasService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class DividaController {
 
     @Autowired
     private DividasService service;
+
+    @Autowired
+    private ClienteService clienteService;
 
     @GetMapping
     public ResponseEntity findAll() {
@@ -41,10 +45,23 @@ public class DividaController {
 
     }
     @PostMapping
-    public ResponseEntity post(@RequestBody Divida Divida){
-        Divida = service.salvar(Divida);
-        return ResponseEntity.ok().body(Divida);
+    public ResponseEntity<DividaDTO> createDivida(@RequestBody DividaDTO dividaDTO) {
+        Divida divida = converter(dividaDTO);
+
+        // Salvar o cliente primeiro
+        Cliente cliente = divida.getCliente();
+        cliente = clienteService.save(cliente);
+
+        // Associar o cliente salvo à divida
+        divida.setCliente(cliente);
+
+        // Salvar a divida
+        divida = service.save(divida);
+
+        DividaDTO dto = DividaDTO.create(divida);
+        return ResponseEntity.ok(dto);
     }
+
 
     @DeleteMapping("{id}")
     public ResponseEntity excluir(@PathVariable("id") Long id){
@@ -71,16 +88,23 @@ public class DividaController {
         Divida.setCliente(dividaAtualizado.getCliente());
         Divida.setValor(dividaAtualizado.getValor());
         Divida.setVencimento(dividaAtualizado.getVencimento());
-        service.salvar(Divida);
+        service.save(Divida);
         return ResponseEntity.ok(Divida);
     }
 
-    public Divida converter(DividaDTO dto){
+    private Divida converter(DividaDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Divida divida = modelMapper.map(dto, Divida.class);
-        Cliente cliente = modelMapper.map(dto, Cliente.class);
+
+        Cliente cliente = new Cliente();
+        cliente.setNome(dto.getNome());
+        cliente.setCpf(dto.getCpf());
+        cliente.setEmail(dto.getEmail());
+        cliente.setTelefone(dto.getTelefone());
 
         divida.setCliente(cliente);
+        divida.setValor(dto.getValor());
+        divida.setVencimento(dto.getVencimento());
 
         return divida;
     }

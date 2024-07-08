@@ -23,7 +23,7 @@ public class DividasService {
     }
 
     @Transactional
-    public Divida salvar(Divida Divida){
+    public Divida save(Divida Divida){
         return repository.save(Divida);
     }
 
