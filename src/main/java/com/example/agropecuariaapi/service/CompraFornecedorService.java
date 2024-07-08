@@ -22,7 +22,7 @@ public class CompraFornecedorService
         return repository.findById(id);
     }
     @Transactional
-    public CompraFornecedor salvar(CompraFornecedor compraFornecedor){
+    public CompraFornecedor save(CompraFornecedor compraFornecedor){
         return repository.save(compraFornecedor);
     }
 

@@ -23,7 +23,7 @@ public class FornecedorService {
     }
 
     @Transactional
-    public Fornecedor salvar(Fornecedor fornecedor){
+    public Fornecedor save(Fornecedor fornecedor){
         return repository.save(fornecedor);
     }
 

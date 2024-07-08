@@ -40,7 +40,7 @@ public class FornecedorController {
 
     @PostMapping
     public ResponseEntity post(@RequestBody Fornecedor Fornecedor){
-        Fornecedor = service.salvar(Fornecedor);
+        Fornecedor = service.save(Fornecedor);
         return ResponseEntity.ok().body(Fornecedor);
     }
 
@@ -73,7 +73,7 @@ public class FornecedorController {
         Fornecedor.setEndereco(FornecedorAtualizado.getEndereco());
         Fornecedor.setDescricao((FornecedorAtualizado.getDescricao()));
 
-        service.salvar(Fornecedor);
+        service.save(Fornecedor);
         return ResponseEntity.ok(Fornecedor);
     }
 

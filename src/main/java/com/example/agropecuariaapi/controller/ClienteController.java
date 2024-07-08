@@ -4,6 +4,7 @@ import com.example.agropecuariaapi.dto.ClienteDTO;
 import com.example.agropecuariaapi.model.entity.Cliente;
 import com.example.agropecuariaapi.model.entity.Endereco;
 import com.example.agropecuariaapi.service.ClienteService;
+import com.example.agropecuariaapi.service.EnderecoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,9 @@ public class ClienteController {
 
     @Autowired
     private ClienteService service;
+
+    @Autowired
+    private EnderecoService enderecoService;
 
     @GetMapping
     public ResponseEntity findAll() {
@@ -39,9 +43,16 @@ public class ClienteController {
 
     }
     @PostMapping
-    public ResponseEntity post(@RequestBody Cliente cliente){
-        cliente = service.salvar(cliente);
-        return ResponseEntity.ok().body(cliente);
+    public ResponseEntity post(@RequestBody ClienteDTO dto){
+        try {
+            Cliente Cliente = converter(dto);
+            Endereco endereco = enderecoService.salvar(Cliente.getEndereco());
+            Cliente.setEndereco(endereco);
+            Cliente = service.save(Cliente);
+            return new ResponseEntity(Cliente, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("{id}")
@@ -72,7 +83,7 @@ public class ClienteController {
         cliente.setCpf(clienteAtualizado.getCpf());
         cliente.setEndereco(clienteAtualizado.getEndereco());
 
-        service.salvar(cliente);
+        service.save(cliente);
         return ResponseEntity.ok(cliente);
     }
 

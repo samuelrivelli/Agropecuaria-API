@@ -23,7 +23,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente salvar(Cliente cliente){
+    public Cliente save(Cliente cliente){
         return repository.save(cliente);
     }
 
