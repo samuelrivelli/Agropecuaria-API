@@ -64,7 +64,7 @@ public class EnderecoController {
         Endereco.setUf(EnderecoAtualizado.getUf());
         Endereco.setCep(EnderecoAtualizado.getCep());
 
-        service.salvar(Endereco);
+        service.save(Endereco);
         return ResponseEntity.ok(Endereco);
     }
 }

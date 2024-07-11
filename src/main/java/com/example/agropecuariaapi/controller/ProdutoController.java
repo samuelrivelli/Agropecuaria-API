@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/produtos")
@@ -38,9 +39,15 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public ResponseEntity post(@RequestBody Produto Produto){
-        Produto = service.save(Produto);
-        return ResponseEntity.ok().body(Produto);
+    public ResponseEntity post(@RequestBody ProdutoDTO dto){
+        try{
+            Produto produto = converter(dto);
+            produto = service.save(produto);
+
+            return new ResponseEntity(produto, HttpStatus.CREATED);
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("{id}")
@@ -56,27 +63,18 @@ public class ProdutoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody Produto ProdutoAtualizado){
-
-        Optional<Produto> ProdutoExistente = service.findById(id);
-
-        if(!service.findById(id).isPresent()){
-            return new ResponseEntity<>("Produtos não encontrado",HttpStatus.NOT_FOUND);
+    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody ProdutoDTO dto) {
+        if (!service.findById(id).isPresent()) {
+            return new ResponseEntity("Produto não encontrado", HttpStatus.NOT_FOUND);
         }
-
-        Produto Produto = ProdutoExistente.get();
-        Produto.setNome(ProdutoAtualizado.getNome());
-        Produto.setTamanho(ProdutoAtualizado.getTamanho());
-        Produto.setLote(ProdutoAtualizado.getLote());
-        Produto.setValidade(ProdutoAtualizado.getValidade());
-        Produto.setQuantidadeEmEstoque(ProdutoAtualizado.getQuantidadeEmEstoque());
-        Produto.setEstoqueMinimo(ProdutoAtualizado.getEstoqueMinimo());
-        Produto.setEstoqueMaximo(ProdutoAtualizado.getEstoqueMaximo());
-        Produto.setValorDeReposicao(ProdutoAtualizado.getValorDeReposicao());
-        Produto.setPreco(ProdutoAtualizado.getPreco());
-
-        service.save(Produto);
-        return ResponseEntity.ok(Produto);
+        try {
+            Produto Produto = converter(dto);
+            Produto.setId(id);
+            service.save(Produto);
+            return ResponseEntity.ok(Produto);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     public Produto converter(ProdutoDTO dto) {

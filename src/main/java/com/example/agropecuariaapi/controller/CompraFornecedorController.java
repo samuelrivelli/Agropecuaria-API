@@ -6,6 +6,7 @@ import com.example.agropecuariaapi.model.entity.Endereco;
 import com.example.agropecuariaapi.model.entity.Fornecedor;
 import com.example.agropecuariaapi.model.repository.CompraFornecedorRepository;
 import com.example.agropecuariaapi.service.CompraFornecedorService;
+import com.example.agropecuariaapi.service.EnderecoService;
 import com.example.agropecuariaapi.service.FornecedorService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class CompraFornecedorController {
 
     @Autowired
     private FornecedorService fornecedorService;
+
+    @Autowired
+    private EnderecoService enderecoService;
 
     @GetMapping
     public ResponseEntity findAll() {
@@ -63,6 +67,7 @@ public class CompraFornecedorController {
         CompraFornecedorDTO dto = CompraFornecedorDTO.create(compraFornecedor);
         return ResponseEntity.ok(dto);
     }
+
 
     @DeleteMapping("{id}")
     public ResponseEntity excluir(@PathVariable("id") Long id){

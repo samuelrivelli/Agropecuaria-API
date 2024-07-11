@@ -1,8 +1,13 @@
 package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.dto.FuncionarioDTO;
-import com.example.agropecuariaapi.model.entity.Endereco;
+import com.example.agropecuariaapi.dto.FuncionarioDTO;
+import com.example.agropecuariaapi.dto.FuncionarioDTO;
+import com.example.agropecuariaapi.dto.FuncionarioDTO;
+import com.example.agropecuariaapi.model.entity.*;
 import com.example.agropecuariaapi.model.entity.Funcionario;
+import com.example.agropecuariaapi.model.entity.Funcionario;
+import com.example.agropecuariaapi.service.EnderecoService;
 import com.example.agropecuariaapi.service.FuncionarioService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +25,9 @@ public class FuncionarioController {
 
     @Autowired
     private FuncionarioService service;
+
+    @Autowired
+    private EnderecoService enderecoService;
 
     @GetMapping
     public ResponseEntity findAll() {
@@ -40,9 +48,16 @@ public class FuncionarioController {
     }
 
     @PostMapping
-    public ResponseEntity post(@RequestBody Funcionario Funcionario){
-        Funcionario = service.salvar(Funcionario);
-        return ResponseEntity.ok().body(Funcionario);
+    public ResponseEntity post(@RequestBody FuncionarioDTO dto){
+        try {
+            Funcionario Funcionario = converter(dto);
+            Endereco endereco = enderecoService.save(Funcionario.getEndereco());
+            Funcionario.setEndereco(endereco);
+            Funcionario = service.save(Funcionario);
+            return new ResponseEntity(Funcionario, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("{id}")
@@ -57,25 +72,30 @@ public class FuncionarioController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody Funcionario FuncionarioAtualizado){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody FuncionarioDTO dto) {
+        try {
+            Optional<Funcionario> optionalFuncionario = service.findById(id);
+            if (!optionalFuncionario.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Funcionario not found");
+            }
+            Funcionario FuncionarioExistente = optionalFuncionario.get();
 
-        Optional<Funcionario> FuncionarioExistente = service.findById(id);
+            Funcionario FuncionarioAtualizado = converter(dto);
 
-        if(!service.findById(id).isPresent()){
-            return new ResponseEntity<>("Funcionario não encontrado",HttpStatus.NOT_FOUND);
+            Endereco enderecoAtualizado = enderecoService.save(FuncionarioAtualizado.getEndereco());
+            FuncionarioAtualizado.setEndereco(enderecoAtualizado);
+
+            FuncionarioAtualizado.setId(id);
+
+            FuncionarioAtualizado = service.save(FuncionarioAtualizado);
+
+            return ResponseEntity.ok(FuncionarioAtualizado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        Funcionario Funcionario = FuncionarioExistente.get();
-        Funcionario.setNome(FuncionarioAtualizado.getNome());
-        Funcionario.setCpf(FuncionarioAtualizado.getCpf());
-        Funcionario.setEmail(FuncionarioAtualizado.getEmail());
-        Funcionario.setCpf(FuncionarioAtualizado.getCpf());
-        Funcionario.setEndereco(FuncionarioAtualizado.getEndereco());
-
-        service.salvar(Funcionario);
-        return ResponseEntity.ok(Funcionario);
     }
+
 
     public Funcionario converter(FuncionarioDTO dto){
         ModelMapper modelMapper = new ModelMapper();

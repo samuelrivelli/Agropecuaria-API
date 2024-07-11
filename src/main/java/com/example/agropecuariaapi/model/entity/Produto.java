@@ -22,7 +22,7 @@ public class Produto {
     private Long id;
 
     private String nome;
-    private Double tamanho;
+    private String tamanho;
     private String lote;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")

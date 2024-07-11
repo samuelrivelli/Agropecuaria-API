@@ -42,11 +42,12 @@ public class ClienteController {
         return ResponseEntity.ok(cliente.map(ClienteDTO::create));
 
     }
+
     @PostMapping
     public ResponseEntity post(@RequestBody ClienteDTO dto){
         try {
             Cliente Cliente = converter(dto);
-            Endereco endereco = enderecoService.salvar(Cliente.getEndereco());
+            Endereco endereco = enderecoService.save(Cliente.getEndereco());
             Cliente.setEndereco(endereco);
             Cliente = service.save(Cliente);
             return new ResponseEntity(Cliente, HttpStatus.CREATED);
@@ -67,25 +68,30 @@ public class ClienteController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody Cliente clienteAtualizado){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ClienteDTO dto) {
+        try {
+            Optional<Cliente> optionalCliente = service.findById(id);
+            if (!optionalCliente.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente not found");
+            }
+            Cliente clienteExistente = optionalCliente.get();
 
-        Optional<Cliente> clienteExistente = service.findById(id);
+            Cliente clienteAtualizado = converter(dto);
 
-        if(!service.findById(id).isPresent()){
-            return new ResponseEntity<>("Cliente não encontrado",HttpStatus.NOT_FOUND);
+            Endereco enderecoAtualizado = enderecoService.save(clienteAtualizado.getEndereco());
+            clienteAtualizado.setEndereco(enderecoAtualizado);
+
+            clienteAtualizado.setId(id);
+
+            clienteAtualizado = service.save(clienteAtualizado);
+
+            return ResponseEntity.ok(clienteAtualizado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        Cliente cliente = clienteExistente.get();
-        cliente.setNome(clienteAtualizado.getNome());
-        cliente.setCpf(clienteAtualizado.getCpf());
-        cliente.setEmail(clienteAtualizado.getEmail());
-        cliente.setCpf(clienteAtualizado.getCpf());
-        cliente.setEndereco(clienteAtualizado.getEndereco());
-
-        service.save(cliente);
-        return ResponseEntity.ok(cliente);
     }
+
 
     public Cliente converter(ClienteDTO dto){
         ModelMapper modelMapper = new ModelMapper();

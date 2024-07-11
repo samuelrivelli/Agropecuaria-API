@@ -23,7 +23,7 @@ public class HistoricoVendasService {
     }
 
     @Transactional
-    public HistoricoVendas salvar(HistoricoVendas historicoVendas){
+    public HistoricoVendas save(HistoricoVendas historicoVendas){
         return repository.save(historicoVendas);
     }
 

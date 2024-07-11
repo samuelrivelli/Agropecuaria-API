@@ -1,8 +1,11 @@
 package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.dto.FornecedorDTO;
+import com.example.agropecuariaapi.dto.FornecedorDTO;
+import com.example.agropecuariaapi.model.entity.Fornecedor;
 import com.example.agropecuariaapi.model.entity.Endereco;
 import com.example.agropecuariaapi.model.entity.Fornecedor;
+import com.example.agropecuariaapi.service.EnderecoService;
 import com.example.agropecuariaapi.service.FornecedorService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,9 @@ public class FornecedorController {
 
     @Autowired
     private FornecedorService service;
+
+    @Autowired
+    private EnderecoService enderecoService;
 
     @GetMapping
     public ResponseEntity findAll() {
@@ -39,11 +45,17 @@ public class FornecedorController {
     }
 
     @PostMapping
-    public ResponseEntity post(@RequestBody Fornecedor Fornecedor){
-        Fornecedor = service.save(Fornecedor);
-        return ResponseEntity.ok().body(Fornecedor);
+    public ResponseEntity post(@RequestBody FornecedorDTO dto){
+        try {
+            Fornecedor Fornecedor = converter(dto);
+            Endereco endereco = enderecoService.save(Fornecedor.getEndereco());
+            Fornecedor.setEndereco(endereco);
+            Fornecedor = service.save(Fornecedor);
+            return new ResponseEntity(Fornecedor, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
-
     @DeleteMapping("{id}")
     public ResponseEntity excluir(@PathVariable("id") Long id){
         Optional<Fornecedor> Fornecedor = service.findById(id);
@@ -56,25 +68,22 @@ public class FornecedorController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody Fornecedor FornecedorAtualizado){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody FornecedorDTO dto) {
+        try {
+            // Converte o DTO em um objeto Fornecedor usando o método converter existente
+            Fornecedor fornecedorAtualizado = converter(dto);
 
-        Optional<Fornecedor> FornecedorExistente = service.findById(id);
+            // Configura o ID do fornecedor a ser atualizado
+            fornecedorAtualizado.setId(id);
 
-        if(!service.findById(id).isPresent()){
-            return new ResponseEntity<>("Fornecedor não encontrado",HttpStatus.NOT_FOUND);
+            // Salva o fornecedor atualizado no banco de dados
+            fornecedorAtualizado = service.save(fornecedorAtualizado);
+
+            return ResponseEntity.ok(fornecedorAtualizado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        Fornecedor Fornecedor = FornecedorExistente.get();
-        Fornecedor.setRazaoSocial(FornecedorAtualizado.getRazaoSocial());
-        Fornecedor.setCnpj(FornecedorAtualizado.getCnpj());
-        Fornecedor.setEmail(FornecedorAtualizado.getEmail());
-        Fornecedor.setTelefone(FornecedorAtualizado.getTelefone());
-        Fornecedor.setEndereco(FornecedorAtualizado.getEndereco());
-        Fornecedor.setDescricao((FornecedorAtualizado.getDescricao()));
-
-        service.save(Fornecedor);
-        return ResponseEntity.ok(Fornecedor);
     }
 
     public Fornecedor converter(FornecedorDTO dto){

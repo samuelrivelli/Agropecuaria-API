@@ -23,7 +23,7 @@ public class VendaService {
     }
 
     @Transactional
-    public Venda salvar(Venda venda){
+    public Venda save(Venda venda){
         return repository.save(venda);
     }
 

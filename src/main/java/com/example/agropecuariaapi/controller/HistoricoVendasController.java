@@ -2,7 +2,9 @@ package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.dto.HistoricoVendasDTO;
 import com.example.agropecuariaapi.model.entity.HistoricoVendas;
+import com.example.agropecuariaapi.model.entity.Produto;
 import com.example.agropecuariaapi.service.HistoricoVendasService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +40,14 @@ public class HistoricoVendasController {
     }
 
     @PostMapping
-    public ResponseEntity post(@RequestBody HistoricoVendas HistoricoVendas){
-        HistoricoVendas = service.salvar(HistoricoVendas);
-        return ResponseEntity.ok().body(HistoricoVendas);
+    public ResponseEntity<HistoricoVendasDTO> createHistoricoVendas(@RequestBody HistoricoVendasDTO historicoVendasDTO) {
+
+        HistoricoVendas historicoVendas = converter(historicoVendasDTO);
+
+        HistoricoVendas novoHistorico = service.save(historicoVendas);
+
+        HistoricoVendasDTO novoHistoricoDTO = HistoricoVendasDTO.create(novoHistorico);
+        return new ResponseEntity<>(novoHistoricoDTO, HttpStatus.CREATED);
     }
 
     @DeleteMapping("{id}")
@@ -53,6 +60,19 @@ public class HistoricoVendasController {
 
         service.excluir(HistoricoVendas.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private HistoricoVendas converter(HistoricoVendasDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        HistoricoVendas historicoVendas= modelMapper.map(dto, HistoricoVendas.class);
+
+        List<Produto> produtos = dto.getProdutos().stream()
+                .map(produtoDTO -> modelMapper.map(produtoDTO, Produto.class))
+                .collect(Collectors.toList());
+
+        historicoVendas.setProdutos(produtos);
+
+        return historicoVendas;
     }
 
 

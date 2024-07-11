@@ -1,6 +1,7 @@
 package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.dto.EstoqueDTO;
+import com.example.agropecuariaapi.dto.ProdutoDTO;
 import com.example.agropecuariaapi.model.entity.Estoque;
 import com.example.agropecuariaapi.model.entity.Produto;
 import com.example.agropecuariaapi.service.EstoqueService;
@@ -54,6 +55,9 @@ public class EstoqueController {
         EstoqueDTO dto = EstoqueDTO.create(estoque);
         return ResponseEntity.ok(dto);
     }
+
+
+
 
     @DeleteMapping("{id}")
     public ResponseEntity excluir(@PathVariable("id") Long id){

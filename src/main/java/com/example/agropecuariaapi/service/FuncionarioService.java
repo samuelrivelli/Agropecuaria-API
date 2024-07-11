@@ -23,7 +23,7 @@ public class FuncionarioService {
     }
 
     @Transactional
-    public Funcionario salvar(Funcionario funcionario){
+    public Funcionario save(Funcionario funcionario){
         return repository.save(funcionario);
     }
 

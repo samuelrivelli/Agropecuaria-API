@@ -16,7 +16,7 @@ public class ProdutoDTO {
     private Long id;
 
     private String nome;
-    private Double tamanho;
+    private String tamanho;
     private String lote;
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate validade;

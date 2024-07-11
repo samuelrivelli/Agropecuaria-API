@@ -48,14 +48,11 @@ public class DividaController {
     public ResponseEntity<DividaDTO> createDivida(@RequestBody DividaDTO dividaDTO) {
         Divida divida = converter(dividaDTO);
 
-        // Salvar o cliente primeiro
         Cliente cliente = divida.getCliente();
         cliente = clienteService.save(cliente);
 
-        // Associar o cliente salvo à divida
         divida.setCliente(cliente);
 
-        // Salvar a divida
         divida = service.save(divida);
 
         DividaDTO dto = DividaDTO.create(divida);
@@ -75,22 +72,39 @@ public class DividaController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody Divida dividaAtualizado){
+    @PutMapping("/{id}")
+    public ResponseEntity<DividaDTO> update(@PathVariable Long id, @RequestBody DividaDTO dividaDTO) {
+        try {
+            Optional<Divida> optionalDivida = service.findById(id);
+            if (!optionalDivida.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
 
-        Optional<Divida> DividasExistente = service.findById(id);
+            Divida dividaExistente = optionalDivida.get();
 
-        if(!service.findById(id).isPresent()){
-            return new ResponseEntity<>("Dividas não encontrado",HttpStatus.NOT_FOUND);
+            dividaExistente.setValor(dividaDTO.getValor());
+            dividaExistente.setVencimento(dividaDTO.getVencimento());
+
+            Cliente clienteExistente = dividaExistente.getCliente();
+            clienteExistente.setNome(dividaDTO.getNome());
+            clienteExistente.setCpf(dividaDTO.getCpf());
+            clienteExistente.setEmail(dividaDTO.getEmail());
+            clienteExistente.setTelefone(dividaDTO.getTelefone());
+
+            clienteExistente = clienteService.save(clienteExistente);
+
+            dividaExistente.setCliente(clienteExistente);
+
+            dividaExistente = service.save(dividaExistente);
+
+            DividaDTO dto = DividaDTO.create(dividaExistente);
+            return ResponseEntity.ok(dto);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-
-        Divida Divida = DividasExistente.get();
-        Divida.setCliente(dividaAtualizado.getCliente());
-        Divida.setValor(dividaAtualizado.getValor());
-        Divida.setVencimento(dividaAtualizado.getVencimento());
-        service.save(Divida);
-        return ResponseEntity.ok(Divida);
     }
+
+
 
     private Divida converter(DividaDTO dto) {
         ModelMapper modelMapper = new ModelMapper();

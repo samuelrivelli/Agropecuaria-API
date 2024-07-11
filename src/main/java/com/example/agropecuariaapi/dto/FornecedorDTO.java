@@ -1,9 +1,6 @@
 package com.example.agropecuariaapi.dto;
 
 import com.example.agropecuariaapi.model.entity.Fornecedor;
-import com.example.agropecuariaapi.model.entity.Endereco;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
