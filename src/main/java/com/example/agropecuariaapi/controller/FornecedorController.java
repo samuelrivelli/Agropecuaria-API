@@ -71,13 +71,10 @@ public class FornecedorController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody FornecedorDTO dto) {
         try {
-            // Converte o DTO em um objeto Fornecedor usando o método converter existente
             Fornecedor fornecedorAtualizado = converter(dto);
 
-            // Configura o ID do fornecedor a ser atualizado
             fornecedorAtualizado.setId(id);
 
-            // Salva o fornecedor atualizado no banco de dados
             fornecedorAtualizado = service.save(fornecedorAtualizado);
 
             return ResponseEntity.ok(fornecedorAtualizado);
