@@ -16,17 +16,18 @@ import java.util.stream.Collectors;
 public class VendaDTO {
 
     private Long id;
-    private String clienteNome; // Nome do cliente
+    private Long clienteId; // Apenas o ID do cliente
     private String formaDePagamento;
     private List<ProdutoDTO> produtos = new ArrayList<>();
+
     public static VendaDTO create(Venda venda) {
         ModelMapper modelMapper = new ModelMapper();
         VendaDTO vendaDTO = modelMapper.map(venda, VendaDTO.class);
 
         if (venda.getCliente() != null) {
-            vendaDTO.setClienteNome(venda.getCliente().getNome()); // Obtém o nome do cliente
+            vendaDTO.setClienteId(venda.getCliente().getId()); // Define o ID do cliente
         } else {
-            vendaDTO.setClienteNome("Cliente não disponível"); // Ou algum valor padrão ou tratamento apropriado
+            vendaDTO.setClienteId(null); // Ou algum valor padrão se o cliente for null
         }
 
         vendaDTO.setProdutos(
@@ -41,5 +42,4 @@ public class VendaDTO {
 
         return vendaDTO;
     }
-
 }

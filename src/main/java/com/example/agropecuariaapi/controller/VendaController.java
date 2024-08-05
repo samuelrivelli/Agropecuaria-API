@@ -1,9 +1,11 @@
 package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.dto.VendaDTO;
+import com.example.agropecuariaapi.model.entity.Cliente;
 import com.example.agropecuariaapi.model.entity.Produto;
 import com.example.agropecuariaapi.model.entity.Venda;
 import com.example.agropecuariaapi.model.entity.VendaProduto;
+import com.example.agropecuariaapi.service.ClienteService;
 import com.example.agropecuariaapi.service.ProdutoService;
 import com.example.agropecuariaapi.service.VendaService;
 import org.modelmapper.ModelMapper;
@@ -25,6 +27,9 @@ public class VendaController {
 
     @Autowired
     private ProdutoService produtoService;
+
+    @Autowired
+    private ClienteService clienteService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -74,16 +79,21 @@ public class VendaController {
     }
 
     private Venda converter(VendaDTO dto) {
-        Venda venda = modelMapper.map(dto, Venda.class);
+        Venda venda = new Venda();
+        venda.setId(dto.getId());
+        venda.setFormaDePagamento(dto.getFormaDePagamento());
 
-        // Mapeamento para VendaProduto
+        Cliente cliente = clienteService.findById(dto.getClienteId())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        venda.setCliente(cliente);
+
         List<VendaProduto> vendaProdutos = dto.getProdutos().stream()
                 .map(produtoDTO -> {
                     Produto produto = produtoService.findById(produtoDTO.getId())
                             .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
                     VendaProduto vendaProduto = new VendaProduto();
                     vendaProduto.setProduto(produto);
-                    vendaProduto.setQuantidade(produtoDTO.getQuantidade());  // Certifique-se de que quantidade não é nula
+                    vendaProduto.setQuantidade(produtoDTO.getQuantidade());
                     return vendaProduto;
                 }).collect(Collectors.toList());
 

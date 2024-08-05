@@ -39,10 +39,6 @@ public class Produto {
 
     @ManyToOne
     @JsonIgnore
-    private Estoque estoque;
-
-    @ManyToOne
-    @JsonIgnore
     private HistoricoVendas historicoVendas;
 
 

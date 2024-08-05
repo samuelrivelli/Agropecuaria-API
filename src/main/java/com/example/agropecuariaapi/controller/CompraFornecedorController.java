@@ -68,6 +68,23 @@ public class CompraFornecedorController {
         return ResponseEntity.ok(dto);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<CompraFornecedorDTO> updateCompraFornecedor(@PathVariable("id") Long id, @RequestBody CompraFornecedorDTO compraFornecedorDTO) {
+
+        Optional<CompraFornecedor> existingCompraFornecedor = service.findById(id);
+
+        if (!existingCompraFornecedor.isPresent()) {
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        CompraFornecedor compraFornecedor = existingCompraFornecedor.get();
+
+        compraFornecedor = service.save(compraFornecedor);
+
+        CompraFornecedorDTO dto = CompraFornecedorDTO.create(compraFornecedor);
+        return ResponseEntity.ok(dto);
+    }
 
     @DeleteMapping("{id}")
     public ResponseEntity excluir(@PathVariable("id") Long id){
