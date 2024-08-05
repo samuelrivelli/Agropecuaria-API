@@ -1,5 +1,6 @@
 package com.example.agropecuariaapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,17 +14,22 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Venda {
+public class VendaProduto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private Cliente cliente;
+    @ManyToOne
+    @JoinColumn(name = "venda_id")
+    private Venda venda;
 
-    private String formaDePagamento;
-    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<VendaProduto> vendaProdutos = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "produto_id")
+    @JsonBackReference
+    private Produto produto;
+
+    @Column(nullable = false)  // Verifique se está definido como não-nulo
+    private Integer quantidade;
+
 }

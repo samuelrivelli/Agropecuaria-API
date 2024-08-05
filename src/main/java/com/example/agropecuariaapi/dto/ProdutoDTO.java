@@ -25,6 +25,7 @@ public class ProdutoDTO {
     private Integer estoqueMaximo;
     private Integer valorDeReposicao;
     private Double preco;
+    private Integer quantidade;
 
     public static ProdutoDTO create(Produto produto) {
         ModelMapper modelMapper = new ModelMapper();

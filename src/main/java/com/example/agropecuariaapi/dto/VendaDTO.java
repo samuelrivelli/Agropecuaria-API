@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,17 +16,30 @@ import java.util.stream.Collectors;
 public class VendaDTO {
 
     private Long id;
-
-    List<ProdutoDTO> produtos;
-
-    public static VendaDTO create(Venda Venda){
+    private String clienteNome; // Nome do cliente
+    private String formaDePagamento;
+    private List<ProdutoDTO> produtos = new ArrayList<>();
+    public static VendaDTO create(Venda venda) {
         ModelMapper modelMapper = new ModelMapper();
+        VendaDTO vendaDTO = modelMapper.map(venda, VendaDTO.class);
 
-        VendaDTO dto = modelMapper.map(Venda, VendaDTO.class);
+        if (venda.getCliente() != null) {
+            vendaDTO.setClienteNome(venda.getCliente().getNome()); // Obtém o nome do cliente
+        } else {
+            vendaDTO.setClienteNome("Cliente não disponível"); // Ou algum valor padrão ou tratamento apropriado
+        }
 
-        List<ProdutoDTO> produtosDTO = Venda.getProdutos().stream().map(ProdutoDTO::create).collect(Collectors.toList());
-        dto.setProdutos(produtosDTO);
+        vendaDTO.setProdutos(
+                venda.getVendaProdutos().stream()
+                        .map(vendaProduto -> {
+                            ProdutoDTO produtoDTO = modelMapper.map(vendaProduto.getProduto(), ProdutoDTO.class);
+                            produtoDTO.setQuantidade(vendaProduto.getQuantidade()); // Define a quantidade do produto
+                            return produtoDTO;
+                        })
+                        .collect(Collectors.toList())
+        );
 
-        return dto;
+        return vendaDTO;
     }
+
 }

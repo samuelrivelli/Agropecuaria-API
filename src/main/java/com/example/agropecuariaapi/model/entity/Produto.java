@@ -2,6 +2,7 @@ package com.example.agropecuariaapi.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,20 +35,20 @@ public class Produto {
     private Integer estoqueMaximo;
     private Integer valorDeReposicao;
     private Double preco;
+    private Integer quantidade;
 
     @ManyToOne
+    @JsonIgnore
     private Estoque estoque;
 
     @ManyToOne
+    @JsonIgnore
     private HistoricoVendas historicoVendas;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "produtos")
-    private List<Venda> vendas;
 
-
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     @JsonIgnore
-    @JsonBackReference
-    @ManyToMany(mappedBy = "produtos")
-    private List<CompraFornecedor> compraFornecedores;
+    private List<VendaProduto> vendaProdutos = new ArrayList<>();
+
 }

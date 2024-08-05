@@ -1,10 +1,10 @@
 package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.dto.VendaDTO;
-import com.example.agropecuariaapi.dto.VendaDTO;
-import com.example.agropecuariaapi.model.entity.Venda;
 import com.example.agropecuariaapi.model.entity.Produto;
 import com.example.agropecuariaapi.model.entity.Venda;
+import com.example.agropecuariaapi.model.entity.VendaProduto;
+import com.example.agropecuariaapi.service.ProdutoService;
 import com.example.agropecuariaapi.service.VendaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,12 @@ public class VendaController {
     @Autowired
     private VendaService service;
 
+    @Autowired
+    private ProdutoService produtoService;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
     @GetMapping
     public ResponseEntity findAll() {
         List<Venda> list = service.findAll();
@@ -31,65 +37,59 @@ public class VendaController {
 
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable("id") Long id){
-        Optional<Venda > Venda = service.findById(id);
+        Optional<Venda> venda = service.findById(id);
 
-        if(!Venda.isPresent()){
+        if(!venda.isPresent()){
             return new ResponseEntity<>("Venda não encontrada", HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(Venda.map(VendaDTO::create));
-
-    }
-    @PostMapping()
-    public ResponseEntity post(@RequestBody VendaDTO dto) {
-        try {
-            Venda Venda = converter(dto);
-            Venda = service.save(Venda);
-            return new ResponseEntity(Venda, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(venda.map(VendaDTO::create));
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity update(@PathVariable("id") Long id, @RequestBody VendaDTO dto) {
-        if (!service.findById(id).isPresent()) {
-            return new ResponseEntity("Venda não encontrado", HttpStatus.NOT_FOUND);
-        }
-        try {
-            Venda Venda = converter(dto);
-            Venda.setId(id);
-            service.save(Venda);
-            return ResponseEntity.ok(Venda);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping
+    public ResponseEntity<VendaDTO> createVenda(@RequestBody VendaDTO vendaDTO) {
+        Venda venda = converter(vendaDTO);
+        Venda savedVenda = service.save(venda);
+        return ResponseEntity.ok(VendaDTO.create(savedVenda));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<VendaDTO> updateVenda(@PathVariable Long id, @RequestBody VendaDTO vendaDTO) throws Exception {
+        Venda venda = converter(vendaDTO);
+        venda.setId(id);
+        Venda updatedVenda = service.update(venda);
+        return ResponseEntity.ok(VendaDTO.create(updatedVenda));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity excluir(@PathVariable("id") Long id){
-        Optional<Venda> Venda = service.findById(id);
+        Optional<Venda> venda = service.findById(id);
 
-        if(!Venda.isPresent()){
+        if(!venda.isPresent()){
             return new ResponseEntity<>("Venda não encontrada", HttpStatus.NOT_FOUND);
         }
 
-        service.excluir(Venda.get());
+        service.excluir(venda.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private Venda converter(VendaDTO dto) {
-        ModelMapper modelMapper = new ModelMapper();
-        Venda Venda= modelMapper.map(dto, Venda.class);
+        Venda venda = modelMapper.map(dto, Venda.class);
 
-        List<Produto> produtos = dto.getProdutos().stream()
-                .map(produtoDTO -> modelMapper.map(produtoDTO, Produto.class))
-                .collect(Collectors.toList());
+        // Mapeamento para VendaProduto
+        List<VendaProduto> vendaProdutos = dto.getProdutos().stream()
+                .map(produtoDTO -> {
+                    Produto produto = produtoService.findById(produtoDTO.getId())
+                            .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                    VendaProduto vendaProduto = new VendaProduto();
+                    vendaProduto.setProduto(produto);
+                    vendaProduto.setQuantidade(produtoDTO.getQuantidade());  // Certifique-se de que quantidade não é nula
+                    return vendaProduto;
+                }).collect(Collectors.toList());
 
-        Venda.setProdutos(produtos);
+        venda.setVendaProdutos(vendaProdutos);
 
-        return Venda;
+        return venda;
     }
-
 
 }
