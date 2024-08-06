@@ -1,6 +1,5 @@
 package com.example.agropecuariaapi.controller;
 
-import com.example.agropecuariaapi.dto.ClienteDTO;
 import com.example.agropecuariaapi.dto.DividaDTO;
 import com.example.agropecuariaapi.model.entity.Cliente;
 import com.example.agropecuariaapi.model.entity.Divida;

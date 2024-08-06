@@ -1,5 +1,7 @@
 package com.example.agropecuariaapi.service;
 
+import com.example.agropecuariaapi.exceptions.RegraNegocioException;
+import com.example.agropecuariaapi.model.entity.Produto;
 import com.example.agropecuariaapi.model.entity.Produto;
 import com.example.agropecuariaapi.model.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
@@ -23,7 +25,8 @@ public class ProdutoService {
     }
 
     @Transactional
-    public Produto save(Produto produto){
+    public Produto save(Produto produto)  {
+        validar(produto);
         return repository.save(produto);
     }
 
@@ -33,5 +36,17 @@ public class ProdutoService {
         repository.delete(produto);
     }
 
+    public void validar(Produto Produto) {
 
+        if (Produto.getNome() == null || Produto.getNome().trim().equals("")) {
+            throw new RegraNegocioException("Nome inválido");
+        }
+        if (Produto.getLote() == null || Produto.getLote().trim().equals("")) {
+            throw new RegraNegocioException("Lote inválido");
+        }
+        if (Produto.getPreco() == null || Produto.getPreco().equals(0)) {
+            throw new RegraNegocioException("Preco inválido");
+        }
+
+    }
 }

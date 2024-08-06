@@ -4,7 +4,6 @@ import com.example.agropecuariaapi.dto.CompraFornecedorDTO;
 import com.example.agropecuariaapi.model.entity.CompraFornecedor;
 import com.example.agropecuariaapi.model.entity.Endereco;
 import com.example.agropecuariaapi.model.entity.Fornecedor;
-import com.example.agropecuariaapi.model.repository.CompraFornecedorRepository;
 import com.example.agropecuariaapi.service.CompraFornecedorService;
 import com.example.agropecuariaapi.service.EnderecoService;
 import com.example.agropecuariaapi.service.FornecedorService;
@@ -12,7 +11,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,5 +1,7 @@
 package com.example.agropecuariaapi.service;
 
+import com.example.agropecuariaapi.exceptions.RegraNegocioException;
+import com.example.agropecuariaapi.model.entity.CompraFornecedor;
 import com.example.agropecuariaapi.model.entity.CompraFornecedor;
 import com.example.agropecuariaapi.model.repository.CompraFornecedorRepository;
 import jakarta.transaction.Transactional;
@@ -23,6 +25,7 @@ public class CompraFornecedorService
     }
     @Transactional
     public CompraFornecedor save(CompraFornecedor compraFornecedor){
+        validar(compraFornecedor);
         return repository.save(compraFornecedor);
     }
 
@@ -30,5 +33,16 @@ public class CompraFornecedorService
     public void excluir(CompraFornecedor compraFornecedor){
         Objects.requireNonNull(compraFornecedor.getId());
         repository.delete(compraFornecedor);
+    }
+
+    public void validar(CompraFornecedor CompraFornecedor) {
+
+        if (CompraFornecedor.getFornecedor() == null ) {
+            throw new RegraNegocioException("Fornecedor inválido");
+        }
+        if (CompraFornecedor.getValor() == null || CompraFornecedor.getValor().equals("")) {
+            throw new RegraNegocioException("Valor inválido");
+        }
+
     }
 }

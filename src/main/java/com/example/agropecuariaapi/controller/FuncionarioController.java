@@ -1,11 +1,7 @@
 package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.dto.FuncionarioDTO;
-import com.example.agropecuariaapi.dto.FuncionarioDTO;
-import com.example.agropecuariaapi.dto.FuncionarioDTO;
-import com.example.agropecuariaapi.dto.FuncionarioDTO;
 import com.example.agropecuariaapi.model.entity.*;
-import com.example.agropecuariaapi.model.entity.Funcionario;
 import com.example.agropecuariaapi.model.entity.Funcionario;
 import com.example.agropecuariaapi.service.EnderecoService;
 import com.example.agropecuariaapi.service.FuncionarioService;

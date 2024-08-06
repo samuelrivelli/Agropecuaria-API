@@ -1,5 +1,7 @@
 package com.example.agropecuariaapi.service;
 
+import com.example.agropecuariaapi.exceptions.RegraNegocioException;
+import com.example.agropecuariaapi.model.entity.Funcionario;
 import com.example.agropecuariaapi.model.entity.Funcionario;
 import com.example.agropecuariaapi.model.repository.FuncionarioRepository;
 import jakarta.transaction.Transactional;
@@ -24,6 +26,7 @@ public class FuncionarioService {
 
     @Transactional
     public Funcionario save(Funcionario funcionario){
+        validar(funcionario);
         return repository.save(funcionario);
     }
 
@@ -31,6 +34,19 @@ public class FuncionarioService {
     public void excluir(Funcionario funcionario){
         Objects.requireNonNull(funcionario.getId());
         repository.delete(funcionario);
+    }
+
+    public void validar(Funcionario Funcionario) {
+
+        if (Funcionario.getNome() == null || Funcionario.getNome().trim().equals("")) {
+            throw new RegraNegocioException("Nome inválido");
+        }
+        if (Funcionario.getCpf() == null || Funcionario.getCpf().trim().equals("")) {
+            throw new RegraNegocioException("CPF inválido");
+        }
+        if (Funcionario.getEmail() == null || Funcionario.getEmail().trim().equals("")) {
+            throw new RegraNegocioException("Email inválido");
+        }
     }
 
 

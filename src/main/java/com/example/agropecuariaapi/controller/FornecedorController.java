@@ -1,10 +1,8 @@
 package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.dto.FornecedorDTO;
-import com.example.agropecuariaapi.dto.FornecedorDTO;
 import com.example.agropecuariaapi.model.entity.Fornecedor;
 import com.example.agropecuariaapi.model.entity.Endereco;
-import com.example.agropecuariaapi.model.entity.Fornecedor;
 import com.example.agropecuariaapi.service.EnderecoService;
 import com.example.agropecuariaapi.service.FornecedorService;
 import org.modelmapper.ModelMapper;

@@ -1,5 +1,6 @@
 package com.example.agropecuariaapi.service;
 
+import com.example.agropecuariaapi.exceptions.RegraNegocioException;
 import com.example.agropecuariaapi.model.entity.Cliente;
 import com.example.agropecuariaapi.model.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
@@ -23,7 +24,8 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente save(Cliente cliente){
+    public Cliente save(Cliente cliente)  {
+        validar(cliente);
         return repository.save(cliente);
     }
 
@@ -31,6 +33,19 @@ public class ClienteService {
     public void excluir(Cliente cliente){
         Objects.requireNonNull(cliente.getId());
         repository.delete(cliente);
+    }
+
+    public void validar(Cliente Cliente) {
+
+        if (Cliente.getNome() == null || Cliente.getNome().trim().equals("")) {
+            throw new RegraNegocioException("Nome inválido");
+        }
+        if (Cliente.getCpf() == null || Cliente.getCpf().trim().equals("")) {
+            throw new RegraNegocioException("CPF inválido");
+        }
+        if (Cliente.getEmail() == null || Cliente.getEmail().trim().equals("")) {
+            throw new RegraNegocioException("Email inválido");
+        }
     }
 
 

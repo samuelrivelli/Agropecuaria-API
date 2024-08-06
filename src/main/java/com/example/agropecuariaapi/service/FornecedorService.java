@@ -1,5 +1,7 @@
 package com.example.agropecuariaapi.service;
 
+import com.example.agropecuariaapi.exceptions.RegraNegocioException;
+import com.example.agropecuariaapi.model.entity.Fornecedor;
 import com.example.agropecuariaapi.model.entity.Fornecedor;
 import com.example.agropecuariaapi.model.repository.FornecedorRepository;
 import jakarta.transaction.Transactional;
@@ -24,6 +26,7 @@ public class FornecedorService {
 
     @Transactional
     public Fornecedor save(Fornecedor fornecedor){
+        validar(fornecedor);
         return repository.save(fornecedor);
     }
 
@@ -31,6 +34,19 @@ public class FornecedorService {
     public void excluir(Fornecedor fornecedor){
         Objects.requireNonNull(fornecedor.getId());
         repository.delete(fornecedor);
+    }
+
+    public void validar(Fornecedor Fornecedor) {
+
+        if (Fornecedor.getRazaoSocial() == null || Fornecedor.getRazaoSocial().trim().equals("")) {
+            throw new RegraNegocioException("Nome inválido");
+        }
+        if (Fornecedor.getCnpj() == null || Fornecedor.getCnpj().trim().equals("")) {
+            throw new RegraNegocioException("CPF inválido");
+        }
+        if (Fornecedor.getEmail() == null || Fornecedor.getEmail().trim().equals("")) {
+            throw new RegraNegocioException("Email inválido");
+        }
     }
 
 

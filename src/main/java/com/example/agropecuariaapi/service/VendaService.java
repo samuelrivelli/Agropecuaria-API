@@ -3,6 +3,7 @@ package com.example.agropecuariaapi.service;
 import com.example.agropecuariaapi.dto.VendaDTO;
 import com.example.agropecuariaapi.exceptions.RegraNegocioException;
 import com.example.agropecuariaapi.model.entity.Venda;
+import com.example.agropecuariaapi.model.entity.Venda;
 import com.example.agropecuariaapi.model.repository.VendaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,12 @@ public class VendaService {
     }
 
     public Venda save(Venda venda) {
+        validar(venda);
         return repository.save(venda);
     }
 
     public Venda update(Venda venda) {
+        validar(venda);
         return repository.save(venda);
     }
 
@@ -55,5 +58,16 @@ public class VendaService {
         venda.setId(id);
         Venda updatedVenda = repository.save(venda);
         return modelMapper.map(updatedVenda, VendaDTO.class);
+    }
+
+    public void validar(Venda Venda) {
+
+        if (Venda.getCliente() == null ) {
+            throw new RegraNegocioException("Cliente inválido");
+        }
+        if (Venda.getFormaDePagamento() == null || Venda.getFormaDePagamento().trim().equals("")) {
+            throw new RegraNegocioException("CPF inválido");
+        }
+
     }
 }

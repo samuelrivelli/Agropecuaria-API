@@ -1,5 +1,7 @@
 package com.example.agropecuariaapi.service;
 
+import com.example.agropecuariaapi.exceptions.RegraNegocioException;
+import com.example.agropecuariaapi.model.entity.Divida;
 import com.example.agropecuariaapi.model.entity.Divida;
 import com.example.agropecuariaapi.model.repository.DividaRepository;
 import jakarta.transaction.Transactional;
@@ -23,14 +25,26 @@ public class DividasService {
     }
 
     @Transactional
-    public Divida save(Divida Divida){
-        return repository.save(Divida);
+    public Divida save(Divida divida){
+        validar(divida);
+        return repository.save(divida);
     }
 
     @Transactional
     public void excluir(Divida Divida){
         Objects.requireNonNull(Divida.getId());
         repository.delete(Divida);
+    }
+
+    public void validar(Divida Divida) {
+
+        if (Divida.getCliente() == null) {
+            throw new RegraNegocioException("Cliente inválido");
+        }
+        if (Divida.getValor() == null || Divida.getValor().equals(0)) {
+            throw new RegraNegocioException("Valor inválido");
+        }
+
     }
 
 }
