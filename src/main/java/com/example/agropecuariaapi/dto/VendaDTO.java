@@ -35,7 +35,7 @@ public class VendaDTO {
                 venda.getVendaProdutos().stream()
                         .map(vendaProduto -> {
                             ProdutoDTO produtoDTO = modelMapper.map(vendaProduto.getProduto(), ProdutoDTO.class);
-                            produtoDTO.setQuantidade(vendaProduto.getQuantidade()); // Define a quantidade do produto
+                            produtoDTO.setQuantidade(vendaProduto.getQuantidade());
                             return produtoDTO;
                         })
                         .collect(Collectors.toList())
