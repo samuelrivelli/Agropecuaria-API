@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 public class VendaDTO {
 
     private Long id;
-    private Long clienteId; // Apenas o ID do cliente
+    private Long clienteId;
+    private String nomeCliente;
     private String formaDePagamento;
     private List<ProdutoDTO> produtos = new ArrayList<>();
 
@@ -25,9 +26,9 @@ public class VendaDTO {
         VendaDTO vendaDTO = modelMapper.map(venda, VendaDTO.class);
 
         if (venda.getCliente() != null) {
-            vendaDTO.setClienteId(venda.getCliente().getId()); // Define o ID do cliente
+            vendaDTO.setClienteId(venda.getCliente().getId());
         } else {
-            vendaDTO.setClienteId(null); // Ou algum valor padrão se o cliente for null
+            vendaDTO.setClienteId(null);
         }
 
         vendaDTO.setProdutos(

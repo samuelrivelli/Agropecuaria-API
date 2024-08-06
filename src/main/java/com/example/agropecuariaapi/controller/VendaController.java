@@ -52,11 +52,23 @@ public class VendaController {
         return ResponseEntity.ok(venda.map(VendaDTO::create));
     }
 
+
     @PostMapping
     public ResponseEntity<VendaDTO> createVenda(@RequestBody VendaDTO vendaDTO) {
         Venda venda = converter(vendaDTO);
-        Venda savedVenda = service.save(venda);
-        return ResponseEntity.ok(VendaDTO.create(savedVenda));
+
+
+        Optional<Cliente> clienteOpt = clienteService.findById(vendaDTO.getClienteId());
+        if (clienteOpt.isPresent()) {
+            venda.setCliente(clienteOpt.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        Venda novaVenda = service.save(venda);
+
+        VendaDTO novaVendaDTO = VendaDTO.create(novaVenda);
+        return new ResponseEntity<>(novaVendaDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
