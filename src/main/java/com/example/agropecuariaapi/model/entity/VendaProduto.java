@@ -29,7 +29,7 @@ public class VendaProduto {
     @JsonBackReference
     private Produto produto;
 
-    @Column(nullable = false)  // Verifique se está definido como não-nulo
+    @Column(nullable = false)
     private Integer quantidade;
 
 }

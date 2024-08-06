@@ -1,6 +1,7 @@
 package com.example.agropecuariaapi.controller;
 
 import com.example.agropecuariaapi.dto.VendaDTO;
+import com.example.agropecuariaapi.exceptions.RegraNegocioException;
 import com.example.agropecuariaapi.model.entity.Cliente;
 import com.example.agropecuariaapi.model.entity.Produto;
 import com.example.agropecuariaapi.model.entity.Venda;
@@ -59,7 +60,7 @@ public class VendaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VendaDTO> updateVenda(@PathVariable Long id, @RequestBody VendaDTO vendaDTO) throws Exception {
+    public ResponseEntity<VendaDTO> updateVenda(@PathVariable Long id, @RequestBody VendaDTO vendaDTO) throws RegraNegocioException {
         Venda venda = converter(vendaDTO);
         venda.setId(id);
         Venda updatedVenda = service.update(venda);
@@ -90,7 +91,7 @@ public class VendaController {
         List<VendaProduto> vendaProdutos = dto.getProdutos().stream()
                 .map(produtoDTO -> {
                     Produto produto = produtoService.findById(produtoDTO.getId())
-                            .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                            .orElseThrow(() -> new RegraNegocioException("Produto não encontrado"));
                     VendaProduto vendaProduto = new VendaProduto();
                     vendaProduto.setProduto(produto);
                     vendaProduto.setQuantidade(produtoDTO.getQuantidade());

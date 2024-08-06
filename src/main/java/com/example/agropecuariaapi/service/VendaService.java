@@ -1,6 +1,7 @@
 package com.example.agropecuariaapi.service;
 
 import com.example.agropecuariaapi.dto.VendaDTO;
+import com.example.agropecuariaapi.exceptions.RegraNegocioException;
 import com.example.agropecuariaapi.model.entity.Venda;
 import com.example.agropecuariaapi.model.repository.VendaRepository;
 import org.modelmapper.ModelMapper;
@@ -45,10 +46,10 @@ public class VendaService {
         return modelMapper.map(savedVenda, VendaDTO.class);
     }
 
-    public VendaDTO updateVenda(Long id, VendaDTO vendaDTO) throws Exception {
+    public VendaDTO updateVenda(Long id, VendaDTO vendaDTO) throws RegraNegocioException {
         Optional<Venda> optionalVenda = repository.findById(id);
         if (!optionalVenda.isPresent()) {
-            throw new Exception("Venda não encontrada");
+            throw new RegraNegocioException("Venda não encontrada");
         }
         Venda venda = modelMapper.map(vendaDTO, Venda.class);
         venda.setId(id);
