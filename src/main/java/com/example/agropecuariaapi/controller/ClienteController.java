@@ -7,6 +7,7 @@ import com.example.agropecuariaapi.service.ClienteService;
 import com.example.agropecuariaapi.service.EnderecoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,8 +65,12 @@ public class ClienteController {
             return new ResponseEntity<>("Cliente não encontrado", HttpStatus.NOT_FOUND);
         }
 
-        service.excluir(cliente.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            service.excluir(cliente.get());
+            return ResponseEntity.noContent().build();
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body("O cliente nao pode ser excluido pois possui vendas associadas a ele");
+        }
     }
 
     @PutMapping("/{id}")

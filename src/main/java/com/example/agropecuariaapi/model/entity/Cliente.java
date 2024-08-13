@@ -20,4 +20,8 @@ public class Cliente extends Pessoa {
     @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Divida> dividas;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cliente")
+    private List<Venda> vendas;
 }

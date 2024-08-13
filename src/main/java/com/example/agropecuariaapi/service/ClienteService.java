@@ -3,8 +3,10 @@ package com.example.agropecuariaapi.service;
 import com.example.agropecuariaapi.exceptions.RegraNegocioException;
 import com.example.agropecuariaapi.model.entity.Cliente;
 import com.example.agropecuariaapi.model.repository.ClienteRepository;
+import com.example.agropecuariaapi.model.repository.VendaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +34,11 @@ public class ClienteService {
     @Transactional
     public void excluir(Cliente cliente){
         Objects.requireNonNull(cliente.getId());
-        repository.delete(cliente);
+        try{
+            repository.delete(cliente);
+        } catch (DataIntegrityViolationException e){
+            throw new RegraNegocioException("O cliente não pode ser excluído pois possui vendas associadas a ele");
+        }
     }
 
     public void validar(Cliente Cliente) {
@@ -47,6 +53,7 @@ public class ClienteService {
             throw new RegraNegocioException("Email inválido");
         }
     }
+
 
 
 

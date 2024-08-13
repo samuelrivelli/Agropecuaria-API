@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.nio.file.LinkOption;
 
 public interface VendaRepository extends JpaRepository<Venda, Long> {
+
 }
