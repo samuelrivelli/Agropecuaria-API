@@ -23,6 +23,7 @@ public class CompraFornecedorDTO {
     private String uf;
     private String cep;
     private String descricao;
+    private Double valor;
 
     public static CompraFornecedorDTO create(CompraFornecedor compraFornecedor) {
         ModelMapper modelMapper = new ModelMapper();
