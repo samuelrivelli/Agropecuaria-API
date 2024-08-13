@@ -6,6 +6,7 @@ import com.example.agropecuariaapi.model.entity.Fornecedor;
 import com.example.agropecuariaapi.model.repository.FornecedorRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +34,11 @@ public class FornecedorService {
     @Transactional
     public void excluir(Fornecedor fornecedor){
         Objects.requireNonNull(fornecedor.getId());
-        repository.delete(fornecedor);
+        try{
+            repository.delete(fornecedor);
+        } catch(DataIntegrityViolationException e){
+            throw new RegraNegocioException("O fornecedor não pode ser excluído pois possui compras atreladas a ele");
+        }
     }
 
     public void validar(Fornecedor Fornecedor) {

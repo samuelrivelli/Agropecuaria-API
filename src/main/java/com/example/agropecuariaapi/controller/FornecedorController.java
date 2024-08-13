@@ -7,6 +7,7 @@ import com.example.agropecuariaapi.service.EnderecoService;
 import com.example.agropecuariaapi.service.FornecedorService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,8 +63,13 @@ public class FornecedorController {
             return new ResponseEntity<>("Fornecedor não encontrado", HttpStatus.NOT_FOUND);
         }
 
-        service.excluir(Fornecedor.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            service.excluir(Fornecedor.get());
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (DataIntegrityViolationException e){
+            return ResponseEntity.badRequest().body("O fornecedor não pode ser excluído pois possui compras atreladas a ele");
+        }
+
     }
 
     @PutMapping("/{id}")
