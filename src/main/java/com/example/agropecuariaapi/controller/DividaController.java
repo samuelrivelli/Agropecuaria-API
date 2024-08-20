@@ -5,6 +5,9 @@ import com.example.agropecuariaapi.model.entity.Cliente;
 import com.example.agropecuariaapi.model.entity.Divida;
 import com.example.agropecuariaapi.service.ClienteService;
 import com.example.agropecuariaapi.service.DividasService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,12 +29,24 @@ public class DividaController {
     private ClienteService clienteService;
 
     @GetMapping
+    @Operation(
+            summary = "Mostra todas dívidas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dívidas encontradas"),
+            @ApiResponse(responseCode = "404", description = "Dívidas não encontradas")
+    })
     public ResponseEntity findAll() {
         List<Divida> list = service.findAll();
         return ResponseEntity.ok(list.stream().map(DividaDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Mostra uma dívida baseado no ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dívida encontrada"),
+            @ApiResponse(responseCode = "404", description = "Dívida não encontrada")
+    })
     public ResponseEntity findById(@PathVariable("id") Long id){
         Optional<Divida> Divida = service.findById(id);
 
@@ -44,6 +59,12 @@ public class DividaController {
 
     }
     @PostMapping
+    @Operation(
+            summary = "Salva uma dívida")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Dívida salva"),
+            @ApiResponse(responseCode = "400", description = "Erro ao salvar dívida")
+    })
     public ResponseEntity<DividaDTO> createDivida(@RequestBody DividaDTO dividaDTO) {
         Divida divida = converter(dividaDTO);
 
@@ -60,6 +81,12 @@ public class DividaController {
 
 
     @DeleteMapping("{id}")
+    @Operation(
+            summary = "Exclui uma dívida")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Dívida excluída com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Dívida não encontrada")
+    })
     public ResponseEntity excluir(@PathVariable("id") Long id){
         Optional<Divida> Dividas = service.findById(id);
 
@@ -72,6 +99,12 @@ public class DividaController {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Atualiza uma dívida")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dívida atualizada"),
+            @ApiResponse(responseCode = "404", description = "Dívida não encontrada")
+    })
     public ResponseEntity<DividaDTO> update(@PathVariable Long id, @RequestBody DividaDTO dividaDTO) {
         try {
             Optional<Divida> optionalDivida = service.findById(id);

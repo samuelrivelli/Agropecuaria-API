@@ -5,6 +5,9 @@ import com.example.agropecuariaapi.model.entity.*;
 import com.example.agropecuariaapi.model.entity.Funcionario;
 import com.example.agropecuariaapi.service.EnderecoService;
 import com.example.agropecuariaapi.service.FuncionarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,12 +29,24 @@ public class FuncionarioController {
     private EnderecoService enderecoService;
 
     @GetMapping
+    @Operation(
+            summary = "Mostra todos os funcionários")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Funcionários encontrados"),
+            @ApiResponse(responseCode = "404", description = "Funcionários não encontrados")
+    })
     public ResponseEntity findAll() {
         List<Funcionario> list = service.findAll();
         return ResponseEntity.ok(list.stream().map(FuncionarioDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Mostra um único funcionário baseado no seu ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Funcionário encontrado"),
+            @ApiResponse(responseCode = "404", description = "Funcionário não encontrado")
+    })
     public ResponseEntity findById(@PathVariable("id") Long id){
         Optional<Funcionario> Funcionario = service.findById(id);
 
@@ -44,6 +59,12 @@ public class FuncionarioController {
     }
 
     @PostMapping
+    @Operation(
+            summary = "Salva um funcionário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Funcionário salvo"),
+            @ApiResponse(responseCode = "400", description = "Erro ao salvar funcionário")
+    })
     public ResponseEntity post(@RequestBody FuncionarioDTO dto){
         try {
             Funcionario Funcionario = converter(dto);
@@ -57,6 +78,12 @@ public class FuncionarioController {
     }
 
     @DeleteMapping("{id}")
+    @Operation(
+            summary = "Exclui um cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Funcionário excluído com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Funcionário não encontrado")
+    })
     public ResponseEntity excluir(@PathVariable("id") Long id){
         Optional<Funcionario> Funcionario = service.findById(id);
 
@@ -68,7 +95,14 @@ public class FuncionarioController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Atualiza um funcionário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Funcionário atualizado"),
+            @ApiResponse(responseCode = "404", description = "Funcionário não encontrado")
+    })
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody FuncionarioDTO dto) {
         try {
             Optional<Funcionario> optionalFuncionario = service.findById(id);
@@ -91,7 +125,6 @@ public class FuncionarioController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 
     public Funcionario converter(FuncionarioDTO dto){
         ModelMapper modelMapper = new ModelMapper();

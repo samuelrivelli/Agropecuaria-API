@@ -9,6 +9,9 @@ import com.example.agropecuariaapi.model.entity.VendaProduto;
 import com.example.agropecuariaapi.service.ClienteService;
 import com.example.agropecuariaapi.service.ProdutoService;
 import com.example.agropecuariaapi.service.VendaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,12 +39,24 @@ public class VendaController {
     private ModelMapper modelMapper;
 
     @GetMapping
+    @Operation(
+            summary = "Mostra todas as vendas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Vendas encontradas"),
+            @ApiResponse(responseCode = "404", description = "Vendas não encontradas")
+    })
     public ResponseEntity findAll() {
         List<Venda> list = service.findAll();
         return ResponseEntity.ok(list.stream().map(VendaDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Mostra uma única venda baseado no ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Venda encontrada"),
+            @ApiResponse(responseCode = "404", description = "Venda não encontrado")
+    })
     public ResponseEntity findById(@PathVariable("id") Long id){
         Optional<Venda> venda = service.findById(id);
 
@@ -54,6 +69,12 @@ public class VendaController {
 
 
     @PostMapping
+    @Operation(
+            summary = "Salva uma venda")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Venda salva"),
+            @ApiResponse(responseCode = "400", description = "Erro ao salvar venda")
+    })
     public ResponseEntity<VendaDTO> createVenda(@RequestBody VendaDTO vendaDTO) {
         Venda venda = converter(vendaDTO);
 
@@ -72,6 +93,12 @@ public class VendaController {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Atualiza uma venda")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Venda atualizada"),
+            @ApiResponse(responseCode = "404", description = "Venda não encontrada")
+    })
     public ResponseEntity<VendaDTO> updateVenda(@PathVariable Long id, @RequestBody VendaDTO vendaDTO) throws RegraNegocioException {
         Venda venda = converter(vendaDTO);
         venda.setId(id);
@@ -80,6 +107,12 @@ public class VendaController {
     }
 
     @DeleteMapping("{id}")
+    @Operation(
+            summary = "Exclui uma venda")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Venda excluída com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Venda não encontrado")
+    })
     public ResponseEntity excluir(@PathVariable("id") Long id){
         Optional<Venda> venda = service.findById(id);
 
