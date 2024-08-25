@@ -6,6 +6,7 @@ import com.example.agropecuariaapi.model.entity.Cliente;
 import com.example.agropecuariaapi.model.entity.Produto;
 import com.example.agropecuariaapi.model.entity.Venda;
 import com.example.agropecuariaapi.model.entity.VendaProduto;
+import com.example.agropecuariaapi.model.repository.VendaRepository;
 import com.example.agropecuariaapi.service.ClienteService;
 import com.example.agropecuariaapi.service.ProdutoService;
 import com.example.agropecuariaapi.service.VendaService;
@@ -38,6 +39,9 @@ public class VendaController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private VendaRepository repository;
+
     @GetMapping
     @Operation(
             summary = "Mostra todas as vendas")
@@ -57,14 +61,15 @@ public class VendaController {
             @ApiResponse(responseCode = "200", description = "Venda encontrada"),
             @ApiResponse(responseCode = "404", description = "Venda não encontrado")
     })
-    public ResponseEntity findById(@PathVariable("id") Long id){
-        Optional<Venda> venda = service.findById(id);
 
-        if(!venda.isPresent()){
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+        Optional<Venda> venda = repository.findByIdWithProdutos(id);
+
+        if (venda.isEmpty()) {
             return new ResponseEntity<>("Venda não encontrada", HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(venda.map(VendaDTO::create));
+        return ResponseEntity.ok(VendaDTO.create(venda.get()));
     }
 
 

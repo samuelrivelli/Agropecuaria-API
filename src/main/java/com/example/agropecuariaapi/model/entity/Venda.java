@@ -25,7 +25,8 @@ public class Venda {
     private Cliente cliente;
 
     private String formaDePagamento;
-    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<VendaProduto> vendaProdutos = new ArrayList<>();
+
 }
