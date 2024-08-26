@@ -3,6 +3,8 @@ package com.example.agropecuariaapi.controller;
 import com.example.agropecuariaapi.dto.CarrinhoDTO;
 import com.example.agropecuariaapi.dto.ClienteDTO;
 import com.example.agropecuariaapi.model.entity.Carrinho;
+import com.example.agropecuariaapi.model.entity.Produto;
+import com.example.agropecuariaapi.model.repository.ProdutoRepository;
 import com.example.agropecuariaapi.service.CarrinhoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,6 +25,9 @@ public class CarrinhoController {
     @Autowired
     private CarrinhoService service;
 
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
     @GetMapping
     @Operation(
             summary = "Mostra todos os carrinhos")
@@ -30,9 +35,9 @@ public class CarrinhoController {
             @ApiResponse(responseCode = "200", description = "Carrinhos encontrados"),
             @ApiResponse(responseCode = "404", description = "Carrinhos não encontrados")
     })
-    public ResponseEntity findAll() {
-        List<Carrinho> list = service.findAll();
-        return ResponseEntity.ok(list.stream().map(CarrinhoDTO::create).collect(Collectors.toList()));
+    public ResponseEntity<List<Carrinho>> findAll() {
+        List<Carrinho> carrinhos = service.findAll();
+        return ResponseEntity.ok(carrinhos);
     }
 
     @GetMapping("/{id}")
@@ -42,15 +47,10 @@ public class CarrinhoController {
             @ApiResponse(responseCode = "200", description = "Carrinho encontrado"),
             @ApiResponse(responseCode = "404", description = "Carrinho não encontrado")
     })
-    public ResponseEntity findById(@PathVariable("id") Long id){
-        Optional<Carrinho> cliente = service.findById(id);
-
-        if(!cliente.isPresent()){
-            return new ResponseEntity<>("Carrinho não encontrado", HttpStatus.NOT_FOUND);
-        }
-
-        return ResponseEntity.ok(cliente.map(CarrinhoDTO::create));
-
+    public ResponseEntity<Carrinho> findById(@PathVariable Long id) {
+        Carrinho carrinho = service.findById(id)
+                .orElseThrow(() -> new RuntimeException("Carrinho não encontrado com ID: " + id));
+        return ResponseEntity.ok(carrinho);
     }
 
     @PostMapping
@@ -60,9 +60,17 @@ public class CarrinhoController {
             @ApiResponse(responseCode = "201", description = "Carrinho salvo"),
             @ApiResponse(responseCode = "400", description = "Erro ao salvar carrinho")
     })
-    public ResponseEntity createCarrinho(Carrinho carrinho){
-        service.save(carrinho);
-        return new ResponseEntity(carrinho, HttpStatus.CREATED);
+    public ResponseEntity<Carrinho> criarCarrinho(@RequestBody Carrinho carrinho) {
+        List<Produto> produtos = carrinho.getProdutos().stream()
+                .map(produto -> produtoRepository.findById(produto.getId())
+                        .orElseThrow(() -> new RuntimeException("Produto não encontrado com ID: " + produto.getId())))
+                .collect(Collectors.toList());
+
+        carrinho.setProdutos(produtos);
+
+        Carrinho novoCarrinho = service.save(carrinho);
+
+        return ResponseEntity.ok(novoCarrinho);
     }
 
     @DeleteMapping("/{id}")
@@ -84,17 +92,30 @@ public class CarrinhoController {
 
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity update(@PathVariable Long id, @RequestBody Carrinho carrinho){
-        Optional<Carrinho> c = service.findById(id);
+    @Operation(
+            summary = "Atualiza")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Carrinhoo atualizado"),
+            @ApiResponse(responseCode = "404", description = "Carrinho não encontrado")
+    })
 
-        if(!c.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Carrinho not found");
-        }
-        service.save(carrinho);
-        return ResponseEntity.ok(carrinho);
+    @PutMapping("/{id}")
+    public ResponseEntity<Carrinho> update(@PathVariable Long id, @RequestBody Carrinho carrinhoAtualizado) {
+        Carrinho carrinhoExistente = service.findById(id)
+                .orElseThrow(() -> new RuntimeException("Carrinho não encontrado com ID: " + id));
+
+
+        List<Produto> produtos = carrinhoAtualizado.getProdutos().stream()
+                .map(produto -> produtoRepository.findById(produto.getId())
+                        .orElseThrow(() -> new RuntimeException("Produto não encontrado com ID: " + produto.getId())))
+                .collect(Collectors.toList());
+
+
+        carrinhoExistente.setProdutos(produtos);
+
+        Carrinho carrinhoSalvo = service.save(carrinhoExistente);
+        return ResponseEntity.ok(carrinhoSalvo);
     }
-
 
 
 

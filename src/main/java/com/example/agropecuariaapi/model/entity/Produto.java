@@ -47,4 +47,8 @@ public class Produto {
     @JsonIgnore
     private List<VendaProduto> vendaProdutos = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "carrinho_id")
+    private Carrinho carrinho;
+
 }
