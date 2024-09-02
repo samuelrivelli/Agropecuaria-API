@@ -29,6 +29,7 @@ public class ClienteController {
     @Autowired
     private EnderecoService enderecoService;
 
+
     @GetMapping
     @Operation(
             summary = "Mostra todos os clientes")

@@ -22,25 +22,18 @@ public class VendaDTO {
     private List<ProdutoDTO> produtos = new ArrayList<>();
 
     public static VendaDTO create(Venda venda) {
-        ModelMapper modelMapper = new ModelMapper();
-        VendaDTO vendaDTO = modelMapper.map(venda, VendaDTO.class);
-
-        if (venda.getCliente() != null) {
-            vendaDTO.setClienteId(venda.getCliente().getId());
-        } else {
-            vendaDTO.setClienteId(null);
-        }
-
-        vendaDTO.setProdutos(
-                venda.getVendaProdutos().stream()
-                        .map(vendaProduto -> {
-                            ProdutoDTO produtoDTO = modelMapper.map(vendaProduto.getProduto(), ProdutoDTO.class);
-                            produtoDTO.setQuantidade(vendaProduto.getQuantidade());
-                            return produtoDTO;
-                        })
-                        .collect(Collectors.toList())
+        VendaDTO dto = new VendaDTO();
+        dto.setId(venda.getId());
+        dto.setFormaDePagamento(venda.getFormaDePagamento());
+        dto.setProdutos(venda.getVendaProdutos().stream()
+                .map(vendaProduto -> {
+                    ProdutoDTO produtoDTO = new ProdutoDTO();
+                    produtoDTO.setId(vendaProduto.getProduto().getId());
+                    produtoDTO.setNome(vendaProduto.getProduto().getNome());
+                    produtoDTO.setQuantidade(vendaProduto.getQuantidade());
+                    return produtoDTO;
+                }).collect(Collectors.toList())
         );
-
-        return vendaDTO;
+        return dto;
     }
 }

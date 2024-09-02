@@ -63,7 +63,7 @@ public class VendaController {
     })
 
     public ResponseEntity<?> findById(@PathVariable("id") Long id) {
-        Optional<Venda> venda = service.findById(id);
+        Optional<Venda> venda = repository.findByIdWithProdutos(id);
 
         if (venda.isEmpty()) {
             return new ResponseEntity<>("Venda não encontrada", HttpStatus.NOT_FOUND);
