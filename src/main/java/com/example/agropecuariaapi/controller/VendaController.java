@@ -39,8 +39,6 @@ public class VendaController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private VendaRepository repository;
 
     @GetMapping
     @Operation(
@@ -63,7 +61,7 @@ public class VendaController {
     })
 
     public ResponseEntity<?> findById(@PathVariable("id") Long id) {
-        Optional<Venda> venda = repository.findByIdWithProdutos(id);
+        Optional<Venda> venda = service.findById(id);
 
         if (venda.isEmpty()) {
             return new ResponseEntity<>("Venda não encontrada", HttpStatus.NOT_FOUND);
@@ -152,5 +150,6 @@ public class VendaController {
 
         return venda;
     }
+
 
 }

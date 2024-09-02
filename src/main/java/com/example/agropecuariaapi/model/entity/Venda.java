@@ -1,5 +1,6 @@
 package com.example.agropecuariaapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class Venda {
     private String formaDePagamento;
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
+    @JsonIgnore
     private List<VendaProduto> vendaProdutos = new ArrayList<>();
 
 
