@@ -26,6 +26,7 @@ public class ProdutoDTO {
     private Integer valorDeReposicao;
     private Double preco;
     private Integer quantidade;
+    private String linkFoto;
 
     public static ProdutoDTO create(Produto produto) {
         ModelMapper modelMapper = new ModelMapper();

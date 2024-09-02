@@ -38,6 +38,9 @@ public class Produto {
     private Double preco;
     private Integer quantidade;
 
+    @JsonIgnore
+    private String linkFoto;
+
     @ManyToOne
     @JsonIgnore
     private HistoricoVendas historicoVendas;
