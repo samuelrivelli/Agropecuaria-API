@@ -58,7 +58,7 @@ public class FuncionarioController {
 
     }
 
-    @PostMapping
+    @PostMapping("/post")
     @Operation(
             summary = "Salva um funcionário")
     @ApiResponses(value = {
