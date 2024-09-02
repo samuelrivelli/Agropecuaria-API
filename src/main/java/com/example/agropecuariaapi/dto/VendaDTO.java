@@ -20,12 +20,21 @@ public class VendaDTO {
     private String nomeCliente;
     private String formaDePagamento;
     private List<ProdutoDTO> produtos = new ArrayList<>();
-    private Double valorTotal;  // Novo atributo para o valor total da venda
+    private Double valorTotal;
 
     public static VendaDTO create(Venda venda) {
         VendaDTO dto = new VendaDTO();
         dto.setId(venda.getId());
         dto.setFormaDePagamento(venda.getFormaDePagamento());
+
+        if (venda.getCliente() != null) {
+            dto.setClienteId(venda.getCliente().getId());
+            dto.setNomeCliente(venda.getCliente().getNome());
+        } else {
+            dto.setClienteId(null);
+            dto.setNomeCliente(null);
+        }
+
         dto.setProdutos(venda.getVendaProdutos().stream()
                 .map(vendaProduto -> {
                     ProdutoDTO produtoDTO = new ProdutoDTO();
@@ -50,4 +59,5 @@ public class VendaDTO {
 
         return dto;
     }
+
 }

@@ -10,6 +10,8 @@ import com.example.agropecuariaapi.model.repository.VendaRepository;
 import com.example.agropecuariaapi.service.ClienteService;
 import com.example.agropecuariaapi.service.ProdutoService;
 import com.example.agropecuariaapi.service.VendaService;
+import com.example.agropecuariaapi.views.Views;
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -49,7 +51,7 @@ public class VendaController {
     })
     public ResponseEntity findAll() {
         List<Venda> list = service.findAll();
-        return ResponseEntity.ok(list.stream().map(VendaDTO::create).collect(Collectors.toList()));
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
@@ -59,7 +61,6 @@ public class VendaController {
             @ApiResponse(responseCode = "200", description = "Venda encontrada"),
             @ApiResponse(responseCode = "404", description = "Venda não encontrado")
     })
-
     public ResponseEntity<?> findById(@PathVariable("id") Long id) {
         Optional<Venda> venda = service.findById(id);
 
@@ -67,7 +68,7 @@ public class VendaController {
             return new ResponseEntity<>("Venda não encontrada", HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(VendaDTO.create(venda.get()));
+        return ResponseEntity.ok(venda);
     }
 
 
