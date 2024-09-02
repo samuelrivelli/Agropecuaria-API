@@ -1,25 +1,24 @@
 package com.example.agropecuariaapi.model.entity;
 
-
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HistoricoVendas {
+@Builder
+@Entity
+public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(mappedBy = "historicoVendas")
-    List<Produto> produtos;
-
+    private String login;
+    private String senha;
+    private boolean admin;
 }
-

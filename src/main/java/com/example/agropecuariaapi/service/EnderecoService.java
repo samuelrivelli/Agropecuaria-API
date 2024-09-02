@@ -2,7 +2,8 @@ package com.example.agropecuariaapi.service;
 
 import com.example.agropecuariaapi.model.entity.Endereco;
 import com.example.agropecuariaapi.model.repository.EnderecoRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

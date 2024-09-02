@@ -4,7 +4,8 @@ import com.example.agropecuariaapi.exceptions.RegraNegocioException;
 import com.example.agropecuariaapi.model.entity.Divida;
 import com.example.agropecuariaapi.model.entity.Divida;
 import com.example.agropecuariaapi.model.repository.DividaRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

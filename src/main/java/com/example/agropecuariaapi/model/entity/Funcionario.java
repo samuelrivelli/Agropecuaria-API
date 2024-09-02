@@ -1,9 +1,11 @@
 package com.example.agropecuariaapi.model.entity;
 
-import jakarta.persistence.Entity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
 
 @Entity
 @Data

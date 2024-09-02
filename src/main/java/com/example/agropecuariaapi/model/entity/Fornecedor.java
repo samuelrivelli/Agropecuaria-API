@@ -1,7 +1,9 @@
 package com.example.agropecuariaapi.model.entity;
 
-import jakarta.persistence.*;
+
 import lombok.*;
+
+import javax.persistence.*;
 
 @Entity
 @Data

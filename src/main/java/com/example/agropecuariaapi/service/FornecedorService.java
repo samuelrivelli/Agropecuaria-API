@@ -4,7 +4,8 @@ import com.example.agropecuariaapi.exceptions.RegraNegocioException;
 import com.example.agropecuariaapi.model.entity.Fornecedor;
 import com.example.agropecuariaapi.model.entity.Fornecedor;
 import com.example.agropecuariaapi.model.repository.FornecedorRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
