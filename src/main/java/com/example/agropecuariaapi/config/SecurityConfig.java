@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public OncePerRequestFilter jwtFilter(){
+    public OncePerRequestFilter jwtFilter() {
         return new JwtAuthFilter(jwtService, usuarioService);
     }
 
@@ -63,11 +63,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/fornecedores/**")
                 .permitAll()
-                .antMatchers("/funcionarios/post")
+                .antMatchers("/funcionarios/**")
                 .hasAnyRole("ADMIN")
-                .antMatchers( "/produtos/**")
+                .antMatchers("/produtos/**")
                 .permitAll()
-                .antMatchers( "/vendas/**")
+                .antMatchers("/vendas/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
