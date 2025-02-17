@@ -30,7 +30,6 @@ public class EnderecoService {
         return repository.save(endereco);
     }
 
-    //teste
     @Transactional
     public void excluir(Endereco endereco){
         Objects.requireNonNull(endereco.getId());
